@@ -71,15 +71,7 @@ Deployment
 Requirements: `Docker <https://www.docker.com/>`_, `docker-compose
 <https://docs.docker.com/compose/>`_.
 
-Download and extract demo file:
-
-.. code-block:: bash
-
-  curl https://get.eva-ics.com/demos/eva_farm.tgz -o eva_farm.tgz
-  tar xzvf eva_farm.tgz
-  cd eva_farm
-
-Execute *./deploy.sh* to deploy containers and demo configuration
+* Execute *./deploy.sh* to deploy containers and demo configuration
 
 Management
 ==========
