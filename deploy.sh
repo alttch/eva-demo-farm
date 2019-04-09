@@ -1,5 +1,8 @@
 #!/bin/sh
 
+USER=operator
+PASSWORD=123
+
 MA_SETUP="uc/farm-uc1 uc/farm-uc2"
 
 docker-compose down -t 0
@@ -34,8 +37,8 @@ for c in $MA_SETUP; do
     exit 3
   fi
 done
-echo -n "Creating user 'operator' with password '123': "
-docker exec eva_farm_scada eva sfa user create operator 123 operator |grep 'key : operator' > /dev/null
+echo -n "Creating user '${USER}' with password '${PASSWORD}': "
+docker exec eva_farm_scada eva sfa user create ${USER} ${PASSWORD} operator |grep 'key : operator' > /dev/null
 if [ $? -ne 0 ]; then
   echo "FAILED"
   exit 3
