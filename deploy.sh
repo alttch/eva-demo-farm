@@ -6,6 +6,7 @@ PASSWORD=123
 MA_SETUP="uc/farm-uc1 uc/farm-uc2"
 
 docker-compose down -t 0
+docker pull altertech/eva-ics
 echo "Starting cluster"
 docker-compose up -d || exit 1
 I=0

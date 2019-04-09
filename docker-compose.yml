@@ -5,14 +5,14 @@ services:
     image: eclipse-mosquitto
     networks:
       eva_farm_ic:
-        ipv4_address: 10.27.11.200
+        ipv4_address: 10.27.12.200
 
   eva-uc1:
     container_name: eva_farm_uc1
     hostname: farm-uc1
     environment:
       - auto_install=1
-      - mqtt=10.27.11.200
+      - mqtt=10.27.12.200
       - link=
       - product=uc
       - layout=enterprise
@@ -26,14 +26,14 @@ services:
     image: altertech/eva-ics
     networks:
       eva_farm_ic:
-        ipv4_address: 10.27.11.101
+        ipv4_address: 10.27.12.101
 
   eva-uc2:
     container_name: eva_farm_uc2
     hostname: farm-uc2
     environment:
       - auto_install=1
-      - mqtt=10.27.11.200
+      - mqtt=10.27.12.200
       - link=
       - product=uc
       - layout=enterprise
@@ -47,7 +47,7 @@ services:
     image: altertech/eva-ics
     networks:
       eva_farm_ic:
-        ipv4_address: 10.27.11.102
+        ipv4_address: 10.27.12.102
 
   eva-scada:
     container_name: eva_farm_scada
@@ -56,7 +56,7 @@ services:
       - "8828:8828"
     environment:
       - auto_install=1
-      - mqtt=10.27.11.200
+      - mqtt=10.27.12.200
       - link=1
       - product='lm sfa'
       - layout=enterprise
@@ -73,7 +73,7 @@ services:
         - ./cfg:/deploy-cfg
     networks:
       eva_farm_ic:
-        ipv4_address: 10.27.11.199
+        ipv4_address: 10.27.12.199
 
 networks:
   eva_farm_ic:
@@ -81,7 +81,7 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 10.27.11.0/24
+        - subnet: 10.27.12.0/24
 
 volumes:
   ui:

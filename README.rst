@@ -56,10 +56,10 @@ Network and containers
 * Both UCs are set up on dedicated nodes and dynamically discovered by LM/SFA
 * SFA and LM PLC are set up on the same node and statically connected via HTTP
 
-* **eva_farm_mqtt** local MQTT server (mosquitto), *10.27.11.200*
-* **eva_farm_uc1** UC in greenhouse 1, *10.27.11.101*
-* **eva_farm_uc2** UC in greenhouse 2, *10.27.11.102*
-* **eva_farm_scada** *10.27.11.199*
+* **eva_farm_mqtt** local MQTT server (mosquitto), *10.27.12.200*
+* **eva_farm_uc1** UC in greenhouse 1, *10.27.12.101*
+* **eva_farm_uc2** UC in greenhouse 2, *10.27.12.102*
+* **eva_farm_scada** *10.27.12.199*
  * LM PLC (logic controller)
  * SFA (aggregator, UI)
 
@@ -81,13 +81,13 @@ API
 
 Default master key is: *demo123*
 
-http://10.27.11.199:8828 - SFA API/primary operator interface
+http://10.27.12.199:8828 - SFA API/primary operator interface
 
 Components:
 
-* http://10.27.11.101:8812 - UC in greenhouse 1 API/EI
-* http://10.27.11.102:8812 - UC in greenhouse 2 API/EI
-* http://10.27.11.199:8817 - LM PLC API/EI
+* http://10.27.12.101:8812 - UC in greenhouse 1 API/EI
+* http://10.27.12.102:8812 - UC in greenhouse 2 API/EI
+* http://10.27.12.199:8817 - LM PLC API/EI
 
 The port **8828** is also mapped to main host.
 
@@ -96,7 +96,7 @@ UI
 
 (under development)
 
-http://10.27.11.199:8828
+http://10.27.12.199:8828
 
 SFA user credentials:
 

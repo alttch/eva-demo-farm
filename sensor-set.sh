@@ -14,6 +14,6 @@ R="{ \"jsonrpc\": \"2.0\", \"id\": \"`date '+%N'`\", \"method\": \"update\", "
 R="$R\"params\": { \"k\": \"${MASTERKEY}\", \"i\": \"greenhouse${1}/env/${2}\", \"s\": 1, \"v\": \"${3}\" } }"
 
 echo $R | curl -sv -m5 --header "Content-Type: application/json" --data @- \
-  http://10.27.11.10${1}:8812/jrpc | ( [ ${JQ} -eq 0 ] && jq || cat )
+  http://10.27.12.10${1}:8812/jrpc | ( [ ${JQ} -eq 0 ] && jq || cat )
 
 echo
