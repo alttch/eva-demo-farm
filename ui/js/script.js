@@ -148,6 +148,20 @@ function stop_watering(element) {
 	$("#"+element.id+"+label .borderFill2").css("transition-duration", '0s');
 	$("#"+element.id+"+label .borderFill2").css("stroke-dashoffset", '385');
 }
+function sendWateringAction(event, id) {
+	event.preventDefault();
+	var target = event.currentTarget;
+	eva_sfa_action('unit:greenhouse'+id+'/pump',{s:event.target.value});
+	/*if(typeof(openWater[target.id]) == "undefined" || openWater[target.id] == null) {
+		openWater[target.id+"clock_timer"] = null;
+	}
+	if(target.value == 1) {
+		start_watering(target);
+	} else {
+		clearTimeout(openWater[target.id]);
+		clearTimeout(openWater[target.id+"timer"]);
+	}*/
+}
 function ui_append_log(value) {
 	$('.log_block .nano-content').append('<p>'+value+'</p>');
 	$(".log_block .nano").nanoScroller();
@@ -160,13 +174,18 @@ function ui_set_lamp(state) {
 	$('#' + $.escapeSelector(state.oid) + ' input[value='+state.status+']')
 		.prop('checked', true);
 }
-function ui_set_water(greenhouse_id, value, time) {
-	if (value == 0) {
-		stop_watering($('#greenhouse'+greenhouse_id+'_water_radio1')[0]);
-	}
+function sendLampAction(event, id) {
+	event.preventDefault();
+	var value = $('#'+event.target.getAttribute('for')).val();
+	eva_sfa_action('unit:greenhouse'+id+'/lamp',{s:value});
+}
+function ui_set_water(state) {
+//	if (value == 0) {
+//		stop_watering($('#'+$.escapeSelector(state.oid)+'_water_radio1')[0]);
+//	}
 //	$('#greenhouse'+greenhouse_id+'\\/water input[value=1]')
 //		.attr('data-time', time);
-	$('#greenhouse'+greenhouse_id+'\\/water input[value='+value+']')
+	$('#'+$.escapeSelector(state.oid)+' input[value='+state.status+']')
 		.prop('checked', true);
 //	start_watering($('#greenhouse'+greenhouse_id+'\\/water input[value=1]')[0]);
 }
@@ -198,7 +217,7 @@ function createFarm(id) {
 					'</div>'+
 				'</div>'+
 				'<div class="water_holder">'+
-					'<div id="greenhouse'+id+'/water" class="waterswitcher">'+
+					'<div id="unit:greenhouse'+id+'/pump" class="waterswitcher">'+
 						'<input id="greenhouse'+id+'_water_radio1" type="radio" name="greenhouse'+id+'_waterswitcher" value="1" data-time="10">'+
 						'<label for="greenhouse'+id+'_water_radio1">'+
 							'<div></div>'+
@@ -271,16 +290,10 @@ function createFarm(id) {
 		'</div>'+
 		'<script>'+
 		'$("#greenhouse'+id+' .waterswitcher input").click(function (event) {'+
-			'var target = event.currentTarget;'+
-			'if(typeof(openWater[target.id]) == "undefined" || openWater[target.id] == null) {'+
-				'openWater[target.id+"clock_timer"] = null;'+
-			'}'+
-			'if(target.value == 1) {'+
-				'start_watering(target);'+
-			'} else {'+
-				'clearTimeout(openWater[target.id]);'+
-				'clearTimeout(openWater[target.id+"timer"]);'+
-			'}'+
+			'sendWateringAction(event,'+id+')'+
+		'});'+
+		'$("#greenhouse'+id+' .lightswitcher label").click(function (event) {'+
+			'sendLampAction(event, '+id+');'+
 		'});'+
 		'$("#greenhouse'+id+' .sensor_graph").click(function () {'+
 			'$(this).toggleClass("fullScreenMode");'+
