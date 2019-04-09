@@ -67,6 +67,7 @@
       eva_sfa_register_update_state('sensor:greenhouse*/env/soilm', ui_set_sensor);
       eva_sfa_register_update_state('sensor:greenhouse*/env/ldr', ui_set_bright);
       eva_sfa_register_update_state('unit:greenhouse*/lamp', ui_set_lamp);
+      eva_sfa_register_update_state('unit:greenhouse*/pump', ui_set_water);
 			var l = read_cookie("login");
 			var p = read_cookie("password");
 			if (l && p) {
