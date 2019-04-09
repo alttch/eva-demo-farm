@@ -10,6 +10,10 @@ MASTERKEY=`grep MASTERKEY docker-compose.yml |head -1|awk -F= '{ print $2 }'`
 which jq > /dev/null
 JQ=$?
 
-curl -v -m5 -d "k=${MASTERKEY}&i=greenhouse${1}/env/${2}&s=1&v=${3}" http://10.27.11.10${1}:8812/uc-api/update | ( [ ${JQ} -eq 0 ] && jq || cat )
+R="{ \"jsonrpc\": \"2.0\", \"id\": \"`date '+%N'`\", \"method\": \"update\", "
+R="$R\"params\": { \"k\": \"${MASTERKEY}\", \"i\": \"greenhouse${1}/env/${2}\", \"s\": 1, \"v\": \"${3}\" } }"
+
+echo $R | curl -v -m5 --header "Content-Type: application/json" --data @- \
+  http://10.27.11.10${1}:8812/jrpc | ( [ ${JQ} -eq 0 ] && jq || cat )
 
 echo
