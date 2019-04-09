@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+	<div class="dialog_window_holder login_window">
+		<div class="dialog_window">
+			<form id="login_form">
+				<div class="dialog_window_header">Login</div>
+				<div class="form-group input_form">
+					<div class="error_message" id="login_error"></div>
+					<input type="text" class="form-control" name="login" id="login" value="operator" placeholder="User"/>
+					<input type="password" class="form-control" name="password" id="password" value="" placeholder="Password"/>
+				</div>
+				<div class="form-group custom_checkbox">
+					<input type="checkbox" id="remember_me"/>
+					<label for="remember_me">Remember me</label>
+				</div>
+				<div class="form-group">
+					<input type="submit" class="btn" value="Login"/>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="log_block">
+		<div class="log_holder">
+			<div class="nano">
+				<div class="nano-content">
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="page_content containers nano">
+		<div class="farms_holder nano-content">
+		</div>
+	</div>
+	
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.mobile.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/nanoscroller.js"></script>
+	<script src="js/chart.min.js"></script>
+	<script src="js/tools.js"></script>
+	<script src="js/cookie.js"></script>
+	<script src="js/eva_sfa.js"></script>
+	<script src="js/script.js"></script>
+
+	<script type="text/javascript">
+		//ws_mode = false;
+
+		$(document).ready(function() {
+      createFarm(1);
+      createFarm(2);
+      eva_sfa_cb_login_success = after_login
+      eva_sfa_cb_login_error = failed_login
+			eva_sfa_init();
+      eva_sfa_register_update_state('sensor:greenhouse*/env/temp', ui_set_sensor);
+      eva_sfa_register_update_state('sensor:greenhouse*/env/hum', ui_set_sensor);
+      eva_sfa_register_update_state('sensor:greenhouse*/env/soilm', ui_set_sensor);
+      eva_sfa_register_update_state('sensor:greenhouse*/env/ldr', ui_set_bright);
+      eva_sfa_register_update_state('unit:greenhouse*/lamp', ui_set_lamp);
+      eva_sfa_register_update_state('unit:greenhouse*/pump', ui_set_water);
+			var l = read_cookie("login");
+			var p = read_cookie("password");
+			if (l && p) {
+				eva_sfa_login = l;
+        eva_sfa_password = p;
+				start_login();
+			} else {
+				show_login_form();
+				$('#login_form').submit(function(e) {
+					e.preventDefault();
+					eva_sfa_login = e.currentTarget.login.value;
+					eva_sfa_password = e.currentTarget.password.value;
+					var remember_me = e.currentTarget.remember_me.checked;
+          start_login(remember_me);
+				});
+			}
+		});
+	</script>
+
+	<script>
+		var sensorsHistory = [];
+		var chartOptions = {
+			legend: {
+				display: false
+			},
+			scales: {
+				yAxes: [{
+					ticks: {
+						userCallback: function(value, index, values) {
+							if(index == 0 || index == values.length-1) return value;
+						},
+					},
+					gridLines: {
+						display: false,
+						zeroLineColor: '#b3b3b3',
+					},
+				}],
+				xAxes: [{
+					/*display: false,*/
+					ticks: {
+						maxTicksLimit: 2,
+					},
+					gridLines: {
+						display: false,
+						zeroLineColor: '#b3b3b3',
+					},
+				}],
+			},
+			plugins: {
+				filler: {
+					propagate: true
+				}
+			},
+			elements: {
+				line: {
+					tension: 0, // disables bezier curves
+					borderWidth: 1,
+					borderColor: 'rgba(144,144,144,1)'
+				}
+			},
+			tooltips: {
+				mode: 'index',
+				intersect: false,
+			},
+			animation: {
+				duration: 0, // general animation time
+			},
+		};
+		//var ctx = document.getElementById("greenhouse1_tempGraph").getContext('2d');
+		var myChart = [];
+		function success_event() {
+		}
+	</script>
+</body>
+</html>
