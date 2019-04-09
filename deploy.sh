@@ -9,6 +9,7 @@ docker-compose down -t 0
 echo "Starting cluster"
 docker-compose up -d || exit 1
 I=0
+echo "Waiting for cluster auto configuration..."
 while [ 1 ]; do
   sleep 1
   docker exec eva_farm_scada eva sfa test 2>&1|grep "ok" > /dev/null
