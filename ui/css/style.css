@@ -1,0 +1,681 @@
+@font-face {
+    font-family: 'Myriad Pro Regular';
+	src: url('../fonts/MyriadPro-Regular.eot');
+	src: local('../fonts/Myriad Pro Regular'), local('MyriadPro-Regular'),
+		url('../fonts/MyriadPro-Regular.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/MyriadPro-Regular.woff') format('woff'),
+		url('../fonts/MyriadPro-Regular.ttf') format('truetype');
+	/*font-weight: normal;
+	font-style: normal;*/
+}
+@font-face {
+    font-family: 'Myriad Pro Bold';
+	src: url('../fonts/MyriadPro-Bold.eot');
+	src: local('../fonts/Myriad Pro Bold'), local('MyriadPro-Bold'),
+		url('../fonts/MyriadPro-Bold.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/MyriadPro-Bold.woff') format('woff'),
+		url('../fonts/MyriadPro-Bold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Myriad Pro Semibold';
+	src: url('../fonts/MyriadPro-Semibold.eot');
+	src: local('../fonts/Myriad Pro Semibold'), local('MyriadPro-Semibold'),
+		url('../fonts/MyriadPro-Semibold.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/MyriadPro-Semibold.woff') format('woff'),
+		url('../fonts/MyriadPro-Semibold.ttf') format('truetype');
+}
+/** initial setup **/
+.nano {
+  position : relative;
+  width    : 100%;
+  height   : 100%;
+}
+.nano > .nano-content {
+  overflow      : auto;
+}
+.nano > .nano-content:focus {
+  outline: none;
+}
+.nano > .nano-content::-webkit-scrollbar {
+  display: none;
+}
+.has-scrollbar > .nano-content::-webkit-scrollbar {
+  display: block;
+}
+.nano > .nano-pane {
+  background : rgba(255, 255, 255, 0.5);
+  position   : absolute;
+  width      : 6px;
+  right      : -15px;
+  top        : 0;
+  bottom     : 0;
+  /*visibility : hidden\9; /* Target only IE7 and IE8 with this hack */
+ /*opacity    : .01;*/
+  overflow: hidden;
+  -webkit-transition    : .2s;
+  -moz-transition       : .2s;
+  -o-transition         : .2s;
+  transition            : .2s;
+  -moz-border-radius    : 5px;
+  -webkit-border-radius : 5px;
+  border				: none;
+  border-radius         : 0;
+}
+.elements_block .nano > .nano-pane {
+	top: 40px;
+}
+.nano > .nano-pane > .nano-slider {
+  background: rgba(0, 113, 189, 0.5);
+  position              : relative;
+  margin                : 2px 1px;
+  -moz-border-radius    : 3px;
+  -webkit-border-radius : 3px;
+  border-radius         : 3px;
+}
+.nano:hover > .nano-pane, .nano-pane.active, .nano-pane.flashed {
+  visibility : visible\9; /* Target only IE7 and IE8 with this hack */
+  opacity    : 0.99;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+}
+body {
+	height: calc(100% - 150px);
+	background: url('../images/landscape.svg') 50% 0;
+	background-size: cover;
+}
+.containers {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	padding: 0;
+}
+.dialog_window_holder {
+	display: none;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 1001;
+}
+.dialog_window {
+	display: flex;
+	width: 100%;
+	height: 100%;
+}
+.dialog_window #login_form {
+	display: block;
+	width: 100%;
+	height: 246px;
+	max-width: 370px;
+	margin: auto;
+	padding: 30px 20px;
+	border: none;
+	border-radius: 5px;
+	background: url(../images/dialog_background.svg) 0 50% no-repeat rgba(255, 255, 255, 0.3);
+}
+#login_form > div {
+	max-width: 224px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.dialog_window_header {
+	text-align: center;
+	font: 24px 'Myriad Pro Bold';
+	color: #4d4d4d;
+}
+.error_message {
+	display: none;
+	position: absolute;
+	margin: -17px 2px 0;
+	font: 14px 'Myriad Pro Regular';
+	color: #c1272d;
+}
+.input_form {
+	margin: 20px 0 10px;
+}
+.input_form input {
+	height: 37px;
+	font: 14px 'Myriad Pro Regular';
+	color: #4d4d4d;
+	border-radius: 2px;
+}
+.input_form input:focus {
+	box-shadow: none;
+}
+.input_form input.error_key {
+	border-color: #c1272d;
+	border-width: 2px;
+}
+#login_form label {
+	font: 14px 'Myriad Pro Regular';
+	color: #4d4d4d;
+}
+.custom_checkbox {
+	margin-bottom: 8px;
+}
+.custom_checkbox input[type=checkbox] {
+	opacity: 0;
+	width: 16px;
+	height: 16px;
+}
+.custom_checkbox input[type=checkbox] + label {
+	position: absolute;
+	margin: 2px 0 0 -16px;
+	padding-left: 30px;
+}
+.custom_checkbox input[type=checkbox] + label::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 16px;
+	height: 16px;
+	border: 1px solid #000;
+	border-radius: 2px;
+	background: #fff;
+}
+.custom_checkbox input[type=checkbox]:checked + label::after {
+	content: "";
+	position: absolute;
+	left: 3px;
+	top: 4px;
+	width: 10px;
+	height: 6px;
+	border: 2px solid #4d4d4d;
+	transform: rotate(-45deg);
+	border-radius: 0;
+	border-top: none;
+	border-right: none;
+}
+.dialog_window input[type=submit] {
+	width: 100%;
+	font: 18px 'Myriad Pro Bold';
+	border: 1px solid #008c78;
+	color: #fff;
+	background-color: #009bac;
+	background-image: linear-gradient(100deg, #21b9a3, #009bac);
+	border-radius: 2px;
+	box-shadow: none;
+}
+.dialog_window input[type=submit]:hover {
+	background: #009bac;
+}
+.dialog_window input[type=submit]:active {
+	background: #008c96;
+}
+
+.log_block {
+	position: absolute;
+	display: none;
+	top: 0;
+	width: 100%;
+	padding: 10px;
+	background: rgba(255, 255, 255, 0.3);
+}
+.log_holder {
+	max-width: 450px;
+	padding-right: 15px;
+	overflow: hidden;
+	background: rgba(255, 255, 255, 0.5);
+}
+.log_block .nano-content {
+	max-height: 100px;
+	padding-right: 15px;
+}
+.log_block p {
+	font: 12px 'Myriad Pro Regular';
+	color: #808080;
+	margin-bottom: 5px;
+}
+.page_content {
+	display: none;
+	margin-top: 150px;
+	height: 100%;
+}
+.farms_holder + .nano-pane {
+	right: 0;
+	opacity: .01;
+}
+.farms_holder {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	max-height: 100%;
+	padding-bottom: 50px;
+}
+.farm_block {
+	position: relative;
+	display: flex;
+	width: 100%;
+	max-width: 400px;
+	justify-content: space-around;
+	margin: 50px auto auto;
+	padding: 10px;
+	background: #e6e6e6;
+	border: 2px solid #fff;
+	border-radius: 10px;
+	border-top-left-radius: 0;
+}
+.farm_name {
+	position: absolute;
+	height: 40px;
+	top: -40px;
+	left: -2px;
+	padding: 5px 10px;
+	background: #e6e6e6;
+	border: 2px solid #fff;
+	border-bottom: 0;
+	border-radius: 10px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	font: 16px 'Myriad Pro Bold';
+	color: #4d4d4d;
+	text-transform: uppercase;
+}
+.farm_name > span {
+	font-size: 24px;
+}
+.control_block {
+	display: block;
+	margin-bottom: auto;
+	width: 50%;
+	max-width: 170px;
+}
+.sensors_block {
+	width: 100%;
+	max-width: 200px;
+}
+.light_holder, .water_holder {
+	position: relative;
+	width: 120px;
+	margin: 0 auto;
+	padding-top: 70px;
+}
+.water_holder {
+	margin-top: 30px;
+}
+.bright_sensor {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 5px;
+	width: 30px;
+	height: 30px;
+	background: url('../images/light_normal.svg') 0 0 #e6e6e6;
+}
+.bright_sensor[data-state='0'] {
+	top: 4px;
+	left: 9px;
+	width: 22px;
+	height: 22px;
+	background: url('../images/light_low.svg') 0 0 #e6e6e6;
+}
+.lightswitcher, .waterswitcher {
+	display: flex;
+	margin: auto;
+	justify-content: center;
+	padding: 1px;
+	width: 112px;
+	border-radius: 13px;
+	background-image: linear-gradient(to right, #fff, #969696);
+}
+.lightswitcher input, .waterswitcher input {
+	display: none;
+}
+.lightswitcher label, .waterswitcher label {
+	display: block;
+	width: 55px;
+	height: 20px;
+	margin: 0;
+	padding: 4px;
+	font: 10px 'Myriad Pro Bold';
+	color: #b3b3b3;
+	text-align: center;
+	text-transform: uppercase;
+	background: #e6e6e6;
+	border: 1px solid #666;
+}
+.lightswitcher label:hover,
+.waterswitcher label:hover,
+.lightswitcher label:active,
+.waterswitcher label:active {
+	color: #999;
+}
+.lightswitcher label:nth-of-type(1),
+.waterswitcher label:nth-of-type(1) {
+	border-right: none;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	background-image: linear-gradient(to right, #e6e6e6 0%, #e6e6e6 74%, #dcdddd 81%, #dbdbdb 89%, #8c8c8c 100%);
+}
+.lightswitcher label:nth-of-type(1):hover,
+.waterswitcher label:nth-of-type(1):hover {
+	background-image: linear-gradient(to right, #ccc 0%, #ccc 74%, #c9c9c9 81%, #bebebe 89%, #8c8c8c 100%);
+}
+.lightswitcher label:nth-of-type(1):active,
+.waterswitcher label:nth-of-type(1):active {
+	background-image: linear-gradient(to right, #b3b3b3 0%, #b3b3b3 74%, #b4b6b6 81%, #aaa 89%, #6e6e6e 100%);
+}
+.lightswitcher input:nth-of-type(1):checked + label {
+	background: #fec007;
+	border-right: 1px solid #b68f27;
+	color: #333;
+}
+.lightswitcher input:nth-of-type(1):checked + label > div {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	background: url(../images/lamp_on.svg) 50% 0 no-repeat;
+	pointer-events: none;
+}
+.lightswitcher label:nth-of-type(2),
+.waterswitcher label:nth-of-type(2) {
+	border-left: none;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	background-image: linear-gradient(to left, #e6e6e6 0%, #e6e6e6 74%, #dcdddd 81%, #dbdbdb 89%, #8c8c8c 100%);
+}
+.lightswitcher label:nth-of-type(2):hover,
+.waterswitcher label:nth-of-type(2):hover {
+	background-image: linear-gradient(to left, #ccc 0%, #ccc 74%, #c9c9c9 81%, #bebebe 89%, #8c8c8c 100%);
+}
+.lightswitcher label:nth-of-type(2):active,
+.waterswitcher label:nth-of-type(2):active {
+	background-image: linear-gradient(to left, #b3b3b3 0%, #b3b3b3 74%, #b4b6b6 81%, #aaa 89%, #6e6e6e 100%);
+}
+/*.lightswitcher input:nth-of-type(2):checked + label {
+	background: #f9e0a0;
+	border-left: 1px solid #bba552;
+	color: #333;
+}*/
+.lightswitcher input:nth-of-type(2):checked + label > div {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	background: url(../images/lamp_off.svg) 50% 0 no-repeat;
+	pointer-events: none;
+}
+.waterswitcher input:nth-of-type(1) + label > .water_timer {
+	display: none;
+}
+.waterswitcher input:nth-of-type(1):checked + label > .water_timer {
+	display: block;
+	position: absolute;
+	top: 24px;
+	left: 5px;
+	width: 40px;
+	font: 12px 'Myriad Pro Semibold';
+	z-index: 1;
+	pointer-events: none;
+}
+.waterswitcher input:nth-of-type(1) + label > .time_circle {
+	display: none;
+}
+.waterswitcher input:nth-of-type(1):checked + label > .time_circle {
+	display: block;
+	position: absolute;
+	top: 10px;
+	left: 5px;
+	width: 126px;
+	height: 126px;
+	transform: scale(0.33);
+	transform-origin: top left;
+	background: #e6e6e6;
+	border-radius: 124px;
+	pointer-events: none;
+}
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg.circleFill {
+	z-index: 1;
+	stroke-dasharray: 177;
+	stroke-dashoffset: 177;
+	-webkit-transform: rotate(-87deg);
+	transform: rotate(-87deg);
+}
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg.borderFill0 {
+	stroke-dasharray: 335;
+	stroke-dashoffset: 335;
+	-webkit-transform: rotate(-87deg);
+	transform: rotate(-87deg);
+}
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg.borderFill1 {
+	stroke-dasharray: 360;
+	stroke-dashoffset: 360;
+	-webkit-transform: rotate(-87deg);
+	transform: rotate(-87deg);
+	z-index: 1;
+}
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg.borderFill2 {
+	stroke-dasharray: 385;
+	stroke-dashoffset: 385;
+	-webkit-transform: rotate(-87deg);
+	transform: rotate(-87deg);
+}
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg.borderFill0.filled,
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg.borderFill1.filled,
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg.borderFill2.filled,
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg.circleFill.filled {
+	stroke-dashoffset: 0;
+	transition: all 10s linear;
+}
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg.borderFill0.circleFillFast,
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg.borderFill1.circleFillFast,
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg.borderFill2.circleFillFast,
+.waterswitcher input:nth-of-type(1) + label > .time_circle svg.circleFill.circleFillFast {
+	transition: 0s;
+}
+.waterswitcher input:nth-of-type(1):checked + label {
+	background: #87c7f2;
+	border-right: 1px solid #66a4c6;
+	color: #333;
+}
+.waterswitcher input:nth-of-type(1):checked + label > div:first-child {
+	position: absolute;
+	top: 0;
+	left: 15px;
+	width: 100%;
+	height: 50px;
+	background: url(../images/water_on.svg) calc(50% - 1px) 0 no-repeat;
+	pointer-events: none;
+}
+.lightswitcher input:nth-of-type(2):checked + label,
+.waterswitcher input:nth-of-type(2):checked + label {
+	background: #333;
+	border-left: 1px solid #282828;
+	color: #fff;
+}
+.waterswitcher input:nth-of-type(2):checked + label > div {
+	position: absolute;
+	top: 0;
+	left: 15px;
+	width: 100%;
+	height: 50px;
+	background: url(../images/water_off.svg) 50% 0 no-repeat;
+	pointer-events: none;
+}
+.sensor_holder {
+	padding-left: 25px;
+	background: url(../images/temperature.svg) 8px 15px no-repeat;
+	background-size: 15px;
+}
+.temp_holder {
+	margin-top: 10px;
+}
+.hum_holder {
+	background: url(../images/air_humidity.svg) 5px 20px no-repeat;
+	background-size: 17px;
+}
+.soil_holder {
+	background: url(../images/soil_moisture.svg) 3px 20px no-repeat;
+	background-size: 20px;
+}
+.sensor_header {
+	font: 12px 'Myriad Pro Bold';
+	color: #4d4d4d;
+	text-transform: uppercase;
+}
+.sensor_header > span {
+	padding-left: 7px;
+	text-transform: none;
+}
+.sensor_info {
+	position: relative;
+	width: 100%;
+	margin: 25px 0;
+	height: 10px;
+	border: 1px solid #808080;
+	border-radius: 10px;
+	background-image: linear-gradient(to left, #ff5358 0%, #f49b79 11%, #fbd988 22%, #a9e691 33%, #a9e691 67%, #fbd988 78%, #f49b79 89%, #ff5358 100%);
+}
+.sensor_info::before {
+	content: attr(data-min);
+	position: absolute;
+	left: 0;
+	bottom: -16px;
+	font: 12px 'Myriad Pro Semibold';
+	color: #999;
+}
+.sensor_info::after {
+	content: attr(data-max);
+	position: absolute;
+	right: 0;
+	bottom: -16px;
+	font: 12px 'Myriad Pro Semibold';
+	color: #999;
+}
+.sensor_info > .sensor_value {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 8px;
+	height: 8px;
+	background: #fff;
+	border: 1px solid #808080;
+	border-radius: 8px;
+}
+.sensor_info > .sensor_value::before {
+	content: attr(data-value);
+	position: absolute;
+	top: -17px;
+	margin-left: -5px;
+	font: 14px 'Myriad Pro Semibold';
+	color: #333;
+}
+.sensor_graph {
+	position: relative;
+	cursor: pointer;
+}
+.graph_unit {
+	position: absolute;
+	right: 5px;
+	top: -5px;
+	font: 11px 'Myriad Pro Regular';
+	color: #808080;
+}
+.sensor_graph.fullScreenMode {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	padding: 100px 5px 0 0;
+	border-radius: 10px;
+	background: #e6e6e6;
+	z-index: 1;
+}
+.sensor_graph.fullScreenMode .graph_unit {
+	right: 10px;
+	top: 100px;
+	font-size: 14px;
+}
+
+@media (min-width: 426px) {	
+	.waterswitcher input:nth-of-type(1):checked + label > div:first-child,
+	.waterswitcher input:nth-of-type(2):checked + label > div:first-child {
+		left: 0;
+	}
+	.waterswitcher input:nth-of-type(1):checked + label > .water_timer,
+	.waterswitcher input:nth-of-type(1):checked + label > .time_circle {
+		left: -15px;
+	}
+}
+	
+
+@media (min-width: 601px) {
+	body {
+		height: calc(100% - 200px);
+	}
+	.containers {
+		max-width: 600px;
+		margin-right: auto;
+		margin-left: auto;
+	}
+	.page_content {
+		margin-top: 200px;
+	}
+	.elements_block {
+		margin-top: 45px;
+		padding: 0 20px;
+	}
+	.farms_holder + .nano-pane {
+		right: -15px;
+		opacity: .99;
+	}
+	.farm_block {
+		max-width: 540px;
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.sensors_block {
+		max-width: 360px;
+	}
+	.sensor_holder {
+		display: flex;
+		padding-left: 35px;
+	}
+	.hum_holder, .soil_holder {
+		margin-top: 5px;
+	}
+	.temp_info_holder,
+	.hum_info_holder,
+	.soil_info_holder {
+		width: 150px;
+	}
+	.sensor_graph {
+		width: 150px;
+		margin-top: auto;
+		margin-left: auto;
+	}
+	.sensor_graph.fullScreenMode {
+		padding-top: 20px;
+	}
+	.sensor_graph.fullScreenMode .graph_unit {
+		top: 20px;
+	}
+}
+
+@media (min-width: 1200px) {
+	.containers {
+		max-width: 1200px;
+		padding: 0 40px;
+	}
+	
+}
+
+
+

@@ -1,74 +1,47 @@
 #!/bin/sh
 
-CONTAINERS="farm_uc1:10.27.11.101:8812 farm_uc2:10.27.11.102:8812 farm_lm1:10.27.11.111:8817 farm_sfa:10.27.11.199:8828"
+MA_SETUP="uc/farm-uc1 uc/farm-uc2"
 
-MASTERKEY=`grep MASTERKEY docker-compose.yml |head -1|awk -F= '{ print $2 }'`
-
-which curl > /dev/null
-if [ $? -ne 0 ]; then
-    echo "Please install curl"
-    exit 10
-fi
-
-echo "Deploying EVA ICS cluster"
-
+docker-compose down -t 0
+echo "Starting cluster"
 docker-compose up -d || exit 1
-
-echo
-echo -n Waiting for cluster startup
-
-OK=0
-while [ ${OK} -ne 1 ]; do
-    OK=1
-    for c in ${CONTAINERS}; do
-        a=`echo ${c}| cut -d: -f2-`
-        curl -m3 -sd "k=${MASTERKEY}" http://${a}/sys-api/test|grep '"result": "OK"' > /dev/null 2>&1
-        if [ $? -ne 0 ]; then
-            sleep 1
-            OK=0
-            echo -n .
-            break
-        fi
-    done
+I=0
+while [ 1 ]; do
+  sleep 1
+  docker exec eva_farm_scada eva sfa test 2>&1|grep "ok" > /dev/null
+  [ $? -eq 0 ] && break
+  I=`expr $I + 1`
+  if [ $I -gt 60 ]; then
+    echo 'No response from SFA within 60 seconds. Aborting'
+    exit 2
+  fi
 done
-
-echo
-echo "Deploying EVA ICS configuration"
-
-for c in ${CONTAINERS}; do
-    cn=`echo ${c} | cut -d: -f1`
-    docker exec -t eva_${cn} /tools/restore.sh || exit 1
+sleep 3
+echo "Cluster is up. Waiting 30 seconds to let nodes discover each other..."
+sleep 30
+echo "Setting up SFA management API"
+for c in $MA_SETUP; do
+  echo -n "eva sfa controller set $c masterkey \$masterkey -> "
+  docker exec eva_farm_scada eva sfa controller set $c masterkey \$masterkey -y |grep OK
+  if [ $? -ne 0 ]; then
+    echo "FAILED"
+    exit 3
+  fi
+  echo -n "eva sfa controller ma-test $c -> "
+  docker exec eva_farm_scada eva sfa controller ma-test $c|grep OK
+  if [ $? -ne 0 ]; then
+    echo "FAILED"
+    exit 3
+  fi
 done
-
-echo
-echo "Verifying"
-for c in ${CONTAINERS}; do
-    cn=`echo ${c} | cut -d: -f1`
-    a=`echo ${c}| cut -d: -f2-`
-    echo -n "eva_${cn}: "
-    curl -m3 -sd "k=${MASTERKEY}" http://${a}/sys-api/test|grep '"result": "OK"' > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        docker exec -t eva_${cn} /tools/restart.sh > /dev/null 2>&1
-        if [ $? -ne 0 ]; then
-            echo
-            echo "Unable to restart EVA ICS node, container: eva_${cn}"
-            exit 2
-        fi
-        curl -m3 -sd "k=${MASTERKEY}" http://${a}/sys-api/test|grep '"result": "OK"' > /dev/null 2>&1
-        if [ $? -ne 0 ]; then
-            echo "FAILED!"
-            exit 2
-        fi
-    fi
-    echo "OK"
-done
-
-echo
-echo "Deployment completed"
-echo
-echo "Open http://localhost:8828/ in web browser to enter UI, or execute"
-echo
-echo "  docker exec -it `grep "container_name:.*sfa" docker-compose.yml |awk '{ print $2 }'` eva-shell"
-echo
-echo "to run SFA CLI"
-echo
+echo -n "Creating user 'operator' with password '123': "
+docker exec eva_farm_scada eva sfa user create operator 123 operator |grep 'key : operator' > /dev/null
+if [ $? -ne 0 ]; then
+  echo "FAILED"
+  exit 3
+else
+  echo "OK"
+fi
+echo "Setup completed, starting configuration deployment"
+docker exec -t eva_farm_scada bash -c 'cd /deploy-cfg && eva sfa cloud deploy -y farm-demo.yml'
+exit 0

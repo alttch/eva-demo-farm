@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40.33 52.17">
+	<defs>
+		<style>
+			.cls-1{fill:#303c42;}
+			.cls-2{fill:#546e7a;}
+			.cls-3{opacity:0.1;}
+			.cls-3,.cls-4,.cls-5{isolation:isolate;}
+			.cls-4{opacity:0.53;}
+			.cls-5{fill:#fff;opacity:0.2;}
+			.cls-6{fill:url(#Degradado_sin_nombre_2);}
+			.cls-7{fill:url(#Degradado_sin_nombre_2-2);}
+			.cls-8,.cls-9,.cls-10{
+				fill:none;
+				stroke-dasharray: 20 5;
+				stroke-dashoffset: 25;
+				stroke-linecap:round;
+				stroke-miterlimit:5;
+				stroke-width:1.5px;
+				animation: dash 1s linear infinite;
+			}
+			.cls-8{stroke:#29abe2;}
+			.cls-9{
+				stroke:#0071bc;
+				stroke-dashoffset: 35;
+				animation: dash2 1s linear infinite;
+			}
+			.cls-10{
+				stroke:#29abe2;
+				stroke-dashoffset: 45;
+				animation: dash3 1s linear infinite;
+			}
+			@keyframes dash {
+			  to {
+				stroke-dashoffset: 0;
+			  }
+			}
+			@keyframes dash2 {
+			  to {
+				stroke-dashoffset: 10;
+			  }
+			}
+			@keyframes dash3 {
+			  to {
+				stroke-dashoffset: 20;
+			  }
+			}
+		</style>
+		<linearGradient id="Degradado_sin_nombre_2" x1="-3171.09" y1="-2192.31" x2="-3170.79" y2="-2192.62" gradientTransform="translate(-67626.5 -46740.47) rotate(180) scale(21.33)" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-opacity="0.1"/>
+			<stop offset="1" stop-opacity="0"/>
+		</linearGradient><linearGradient id="Degradado_sin_nombre_2-2" x1="-3170.69" y1="-2191.9" x2="-3170.58" y2="-2192" xlink:href="#Degradado_sin_nombre_2"/>
+	</defs>
+	<title>Asset 27</title>
+	<g id="Layer_2" data-name="Layer 2">
+		<g id="Layer_2-2" data-name="Layer 2">
+			<path class="cls-1" d="M1.19,25v2.17a1.09,1.09,0,0,0,1.09,1.09H6.63a1.09,1.09,0,0,0,1.09-1.09V25A1.08,1.08,0,0,1,8.8,23.91h5.44v5.44a1.08,1.08,0,0,0,1.08,1.09h1.09V45.65A4.35,4.35,0,0,0,12.06,50v1.09a1.08,1.08,0,0,0,1.09,1.08H30.54a1.08,1.08,0,0,0,1.09-1.08V50a4.35,4.35,0,0,0-4.35-4.35V30.44h1.09a1.09,1.09,0,0,0,1.09-1.09V18.93l4.39-4.4c.24,7.53,1.51,19.4,4.39,26.12a1.09,1.09,0,1,0,2-.86C37.13,32.55,36,18.87,36,12,36,2.5,29.31,1.27,24.79,1.11a2.15,2.15,0,0,0-4,1.06,2.13,2.13,0,0,0,.92,1.73L20.85,13H18.59a4.35,4.35,0,0,0-4.35,4.35H8.8A7.63,7.63,0,0,0,1.19,25ZM23,13l.81-8.91a2.19,2.19,0,0,0,.91-.85c4,.13,8.83,1.12,9,8.25l-4.55,4.55a4.35,4.35,0,0,0-4.12-3Z"/>
+			<path class="cls-2" d="M14.24,50H29.46a2.18,2.18,0,0,0-2.18-2.17H16.41A2.17,2.17,0,0,0,14.24,50Z"/>
+			<rect class="cls-2" x="18.59" y="30.44" width="6.52" height="15.22"/>
+			<path class="cls-2" d="M16.41,28.26H27.28V17.39a2.17,2.17,0,0,0-2.17-2.17H18.59a2.18,2.18,0,0,0-2.18,2.17Z"/>
+			<path class="cls-3" d="M16.41,47.83h2.18A2.18,2.18,0,0,0,16.41,50H14.24A2.17,2.17,0,0,1,16.41,47.83Z"/>
+			<rect class="cls-3" x="18.59" y="30.44" width="2.17" height="15.22"/>
+			<path class="cls-3" d="M18.59,15.22h2.17a2.17,2.17,0,0,0-2.17,2.17V28.26H16.41V17.39A2.18,2.18,0,0,1,18.59,15.22Z"/>
+			<g class="cls-4"><path class="cls-5" d="M27.28,47.83H25.11A2.17,2.17,0,0,1,27.28,50h2.18A2.18,2.18,0,0,0,27.28,47.83Z"/>
+			<rect class="cls-5" x="22.93" y="30.44" width="2.17" height="15.22"/>
+			<path class="cls-5" d="M25.11,15.22H22.93a2.18,2.18,0,0,1,2.18,2.17V28.26h2.17V17.39A2.17,2.17,0,0,0,25.11,15.22Z"/>
+			</g>
+			<path class="cls-2" d="M3.37,26.09H5.54V25A3.26,3.26,0,0,1,8.8,21.74h5.44V19.57H8.8A5.44,5.44,0,0,0,3.37,25Z"/>
+			<polygon class="cls-6" points="18.59 30.43 25.11 30.43 18.59 36.96 18.59 30.43"/>
+			<polygon class="cls-7" points="12.06 21.74 14.24 19.57 14.24 21.74 12.06 21.74"/>
+			<path class="cls-8" d="M7.38,29.61C7.38,32,10,31.72,10,33.83S7.38,35.7,7.38,38.06,10,40.54,10,42.72,7.38,45,7.38,47.38,10,49.49,10,51.61"/>
+			<path class="cls-9" d="M3.94,29.61c0,2.36,2.58,2.11,2.58,4.22S3.94,35.7,3.94,38.06s2.58,2.48,2.58,4.66S3.94,45,3.94,47.38s2.58,2.11,2.58,4.23"/>
+			<path class="cls-10" d="M.5,29.61c0,2.36,2.58,2.11,2.58,4.22S.5,35.7.5,38.06s2.58,2.48,2.58,4.66S.5,45,.5,47.38s2.58,2.11,2.58,4.23"/>
+		</g>
+	</g>
+</svg>

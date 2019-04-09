@@ -1,0 +1,148 @@
+controller:
+  uc/farm-uc1:
+    phi:
+      vr1:
+        module: vrtrelay
+        config:
+          default_status: 0
+    after-deploy:
+      - { api: update, i: greenhouse1/env/temp, s: 1, v: 22 }
+      - { api: update, i: greenhouse1/env/hum, s: 1, v: 50 }
+      - { api: update, i: greenhouse1/env/soilm, s: 1, v: 90 }
+      - { api: update, i: greenhouse1/env/ldr, s: 1, v: 1 }
+  uc/farm-uc2:
+    phi:
+      vr1:
+        module: vrtrelay
+        config:
+          default_status: 0
+    after-deploy:
+      - { api: update, i: greenhouse2/env/temp, s: 1, v: 22.5 }
+      - { api: update, i: greenhouse2/env/hum, s: 1, v: 51 }
+      - { api: update, i: greenhouse2/env/soilm, s: 1, v: 92 }
+      - { api: update, i: greenhouse2/env/ldr, s: 1, v: 1 }
+  lm/farm-scada:
+    after-deploy:
+      - { api: clear, i: greenhouse1/timers/manual_watering }
+      - { api: clear, i: greenhouse2/timers/manual_watering }
+      - { api: reload_controller, i: uc/farm-uc1 }
+      - { api: reload_controller, i: uc/farm-uc2 }
+
+unit:
+  greenhouse1/pump:
+    controller: uc/farm-uc1
+    action_enabled: true
+    update_interval: 0
+    driver:
+      id: vr1.default
+      config:
+        port: 1
+  greenhouse1/lamp:
+    controller: uc/farm-uc1
+    action_enabled: true
+    update_interval: 0
+    driver:
+      id: vr1.default
+      config:
+        port: 2
+  greenhouse2/pump:
+    controller: uc/farm-uc2
+    action_enabled: true
+    update_interval: 0
+    driver:
+      id: vr1.default
+      config:
+        port: 1
+  greenhouse2/lamp:
+    controller: uc/farm-uc2
+    action_enabled: true
+    update_interval: 0
+    driver:
+      id: vr1.default
+      config:
+        port: 2
+
+sensor:
+  greenhouse1/env/hum:
+    controller: uc/farm-uc1
+  greenhouse1/env/ldr:
+    controller: uc/farm-uc1
+  greenhouse1/env/soilm:
+    controller: uc/farm-uc1
+  greenhouse1/env/temp:
+    controller: uc/farm-uc1
+  greenhouse2/env/hum:
+    controller: uc/farm-uc2
+  greenhouse2/env/ldr:
+    controller: uc/farm-uc2
+  greenhouse2/env/soilm:
+    controller: uc/farm-uc2
+  greenhouse2/env/temp:
+    controller: uc/farm-uc2
+
+lvar:
+  greenhouse1/timers/manual_watering:
+    controller: lm/farm-scada
+    expires: 30
+  greenhouse2/timers/manual_watering:
+    controller: lm/farm-scada
+    expires: 45
+
+lmacro:
+  automation/start_lamp:
+    controller: lm/farm-scada
+    action_exec: ^start_lamp.py
+  automation/start_pump:
+    controller: lm/farm-scada
+    action_exec: ^start_pump.py
+  automation/stop_lamp:
+    controller: lm/farm-scada
+    action_exec: ^stop_lamp.py
+  automation/stop_pump:
+    controller: lm/farm-scada
+    action_exec: ^stop_pump.py
+  control/start_manual_watering:
+    controller: lm/farm-scada
+    action_exec: ^start_manual_watering.py
+
+dmatrix_rule:
+  5ef9b8fd-d527-44ce-ae89-9629afd40d76:
+    controller: lm/farm-scada
+    description: light normal
+    enabled: true
+    oid: sensor:#/ldr/value
+    condition: x = 1
+    break_after_exec: true
+    macro: stop_lamp
+  75915f18-3152-43ce-8ee1-14cd16fa64b2:
+    controller: lm/farm-scada
+    description: light low
+    enabled: true
+    oid: sensor:#/ldr/value
+    condition: x = 0
+    break_after_exec: true
+    macro: start_lamp
+  9600e870-ec56-4a80-b743-c2ff4b7d3298:
+    controller: lm/farm-scada
+    description: too wet soil
+    enabled: true
+    oid: sensor:#/soilm/value
+    condition: x > 110
+    break_after_exec: true
+    macro: stop_pump
+  e8684d1c-98ac-4678-afe2-fcf76108f696:
+    controller: lm/farm-scada
+    description: too dry soil
+    enabled: true
+    oid: sensor:#/soilm/value
+    condition: x < 85
+    break_after_exec: true
+    macro: start_pump
+  8a3094d0-17d3-4a0b-9b2a-3d3414c5bda7:
+    controller: lm/farm-scada
+    description: stop manual watering
+    enabled: true
+    oid: lvar:+/timers/manual_watering/status
+    condition: x = -1
+    break_after_exec: true
+    macro: stop_pump
