@@ -40,6 +40,15 @@ function enableScroll(e) {
 		$(".nano").nanoScroller();
 	},time);
 }
+function logout() {
+	var uris = Array('/ui/', '/pvt/', '/rpvt/');
+    	$.each(uris, function(k, v) {
+      		document.cookie = 'login=; path=' + v;
+      		document.cookie = 'password=; path=' + v;
+    	});
+	eva_sfa_stop();
+	document.location.reload();
+}
 var openWater = [];
 $(document).ready(function() {
 	$('.waterswitcher input').click(function (event) {
@@ -58,7 +67,7 @@ $(document).ready(function() {
 		$(this).toggleClass('fullScreenMode');
 	});
 });
-function start_watering(element) {
+function start_watering(element, time) {
 	if(openWater[element.id] != null) {
 		clearTimeout(openWater[element.id]);
 		clearInterval(openWater[element.id+'timer']);
@@ -74,7 +83,7 @@ function start_watering(element) {
 	if (openWater[element.id+'clock_timer'] != null) {
 		clearTimeout(openWater[element.id+'clock_timer']);
 	}
-	var time = element.getAttribute("data-time") || 10;
+	//var time = element.getAttribute("data-time") || 10;
 	setTimeout(function() {
 		$("#"+element.id+"+label .circleFill")
 			.css("transition-duration", time+'s');
@@ -151,7 +160,12 @@ function stop_watering(element) {
 function sendWateringAction(event, id) {
 	event.preventDefault();
 	var target = event.currentTarget;
-	eva_sfa_action('unit:greenhouse'+id+'/pump',{s:event.target.value});
+	if(target.value == 1) {
+		eva_sfa_run('control/start_manual_watering',{a:id});
+	} else {
+		eva_sfa_run('automation/stop_pump',{a:id});
+	}
+//	eva_sfa_action('unit:greenhouse'+id+'/pump',{s:event.target.value});
 	/*if(typeof(openWater[target.id]) == "undefined" || openWater[target.id] == null) {
 		openWater[target.id+"clock_timer"] = null;
 	}
@@ -187,6 +201,16 @@ function ui_set_water(state) {
 //		.attr('data-time', time);
 	$('#'+$.escapeSelector(state.oid)+' input[value='+state.status+']')
 		.prop('checked', true);
+	if(state.status == state.nstatus) {
+		if(state.nstatus == 1) {
+			setTimeout(function() {
+				var time = Math.round(eva_sfa_expires_in(state.group+'/timers/manual_watering'));
+				start_watering($('#'+$.escapeSelector(state.oid)+' input')[0], time);
+			},100);
+		} else {
+			stop_watering($('#'+$.escapeSelector(state.oid)+' input')[0]);
+		}
+	}
 //	start_watering($('#greenhouse'+greenhouse_id+'\\/water input[value=1]')[0]);
 }
 function ui_set_sensor(state) {

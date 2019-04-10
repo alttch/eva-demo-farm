@@ -109,13 +109,13 @@ body {
 .dialog_window #login_form {
 	display: block;
 	width: 100%;
-	height: 246px;
 	max-width: 370px;
 	margin: auto;
 	padding: 30px 20px;
-	border: none;
-	border-radius: 5px;
-	background: url(../images/dialog_background.svg) 0 50% no-repeat rgba(255, 255, 255, 0.3);
+	border: 4px solid #fff;
+	border-radius: 3px;
+	background: rgba(230, 230, 230, 0.5);
+	background: linear-gradient(0.222turn, rgb(230, 230, 230) 0%, rgba(230, 230, 230, 0.5) 50%, rgba(230, 230, 230, 0.5) 100%)
 }
 #login_form > div {
 	max-width: 224px;
@@ -135,10 +135,11 @@ body {
 	color: #c1272d;
 }
 .input_form {
-	margin: 20px 0 10px;
+	margin: 20px 0 0;
 }
 .input_form input {
 	height: 37px;
+	margin-bottom: 10px;
 	font: 14px 'Myriad Pro Regular';
 	color: #4d4d4d;
 	border-radius: 2px;
@@ -191,7 +192,7 @@ body {
 	border-top: none;
 	border-right: none;
 }
-.dialog_window input[type=submit] {
+.btn {
 	width: 100%;
 	font: 18px 'Myriad Pro Bold';
 	border: 1px solid #008c78;
@@ -201,10 +202,10 @@ body {
 	border-radius: 2px;
 	box-shadow: none;
 }
-.dialog_window input[type=submit]:hover {
+.btn:hover {
 	background: #009bac;
 }
-.dialog_window input[type=submit]:active {
+.btn:active {
 	background: #008c96;
 }
 
@@ -230,6 +231,15 @@ body {
 	font: 12px 'Myriad Pro Regular';
 	color: #808080;
 	margin-bottom: 5px;
+}
+.logout_block {
+	position: absolute;
+	top: 100%;
+	right: 0;
+}
+.logout_block .btn {
+	width: 150px;
+	margin: 20px;
 }
 .page_content {
 	display: none;
