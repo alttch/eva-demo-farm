@@ -224,13 +224,22 @@ body {
 	background: rgba(255, 255, 255, 0.5);
 }
 .log_block .nano-content {
-	max-height: 100px;
+	height: 100px;
 	padding-right: 15px;
 }
 .log_block p {
 	font: 12px 'Myriad Pro Regular';
 	color: #808080;
 	margin-bottom: 5px;
+}
+.log_block p.error_log {
+	color: #dc3545;
+}
+.log_block p.warning_log {
+	color: #ff9800;
+}
+.log_block p.debug_log {
+	color: #28a745;
 }
 .logout_block {
 	position: absolute;

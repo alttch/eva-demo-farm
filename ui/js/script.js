@@ -21,6 +21,7 @@ function after_login() {
   $('.page_content').show();
   enableScroll();
   $(".log_block .nano").nanoScroller({ scroll: 'bottom' });
+  eva_sfa_log_start(20);
   success_event();
 }
 
@@ -176,8 +177,16 @@ function sendWateringAction(event, id) {
 		clearTimeout(openWater[target.id+"timer"]);
 	}*/
 }
-function ui_append_log(value) {
-	$('.log_block .nano-content').append('<p>'+value+'</p>');
+function eva_sfa_process_log_record(value) {
+	var log_class="";
+	if (value.l == 10) {
+		log_class = 'debug_log';
+	} else if (value.l == 30) {
+		log_class = 'warning_log';
+	} else if (value.l == 40) {
+		log_class = 'error_log';
+	}
+	$('.log_block .nano-content').append('<p class="'+log_class+'">'+value.msg+'</p>');
 	$(".log_block .nano").nanoScroller();
 	$(".log_block .nano").nanoScroller({ scroll: 'bottom' });
 }
