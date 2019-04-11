@@ -681,7 +681,7 @@ body {
 		margin-left: auto;
 	}
 	.sensor_graph.fullScreenMode {
-		padding-top: 20px;
+		padding: 10px 7px;
 	}
 	.sensor_graph.fullScreenMode .graph_unit {
 		top: 20px;

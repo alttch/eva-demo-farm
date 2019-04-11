@@ -22,7 +22,6 @@ function after_login() {
   enableScroll();
   $(".log_block .nano").nanoScroller({ scroll: 'bottom' });
   eva_sfa_log_start(20);
-  success_event();
 }
 
 function failed_login(code, msg, data) {
@@ -84,7 +83,6 @@ function start_watering(element, time) {
 	if (openWater[element.id+'clock_timer'] != null) {
 		clearTimeout(openWater[element.id+'clock_timer']);
 	}
-	//var time = element.getAttribute("data-time") || 10;
 	setTimeout(function() {
 		$("#"+element.id+"+label .circleFill")
 			.css("transition-duration", time+'s');
@@ -166,16 +164,6 @@ function sendWateringAction(event, id) {
 	} else {
 		eva_sfa_run('automation/stop_pump',{a:id});
 	}
-//	eva_sfa_action('unit:greenhouse'+id+'/pump',{s:event.target.value});
-	/*if(typeof(openWater[target.id]) == "undefined" || openWater[target.id] == null) {
-		openWater[target.id+"clock_timer"] = null;
-	}
-	if(target.value == 1) {
-		start_watering(target);
-	} else {
-		clearTimeout(openWater[target.id]);
-		clearTimeout(openWater[target.id+"timer"]);
-	}*/
 }
 function eva_sfa_process_log_record(value) {
 	var log_class="";
@@ -203,11 +191,6 @@ function sendLampAction(event, id) {
 	eva_sfa_action('unit:greenhouse'+id+'/lamp',{s:value});
 }
 function ui_set_water(state) {
-//	if (value == 0) {
-//		stop_watering($('#'+$.escapeSelector(state.oid)+'_water_radio1')[0]);
-//	}
-//	$('#greenhouse'+greenhouse_id+'\\/water input[value=1]')
-//		.attr('data-time', time);
 	$('#'+$.escapeSelector(state.oid)+' input[value='+state.status+']')
 		.prop('checked', true);
 	if(state.status == state.nstatus) {
@@ -220,7 +203,6 @@ function ui_set_water(state) {
 			stop_watering($('#'+$.escapeSelector(state.oid)+' input')[0]);
 		}
 	}
-//	start_watering($('#greenhouse'+greenhouse_id+'\\/water input[value=1]')[0]);
 }
 function ui_set_sensor(state) {
 	var el = $('#' + $.escapeSelector(state.oid));
@@ -251,7 +233,7 @@ function createFarm(id) {
 				'</div>'+
 				'<div class="water_holder">'+
 					'<div id="unit:greenhouse'+id+'/pump" class="waterswitcher">'+
-						'<input id="greenhouse'+id+'_water_radio1" type="radio" name="greenhouse'+id+'_waterswitcher" value="1" data-time="10">'+
+						'<input id="greenhouse'+id+'_water_radio1" type="radio" name="greenhouse'+id+'_waterswitcher" value="1">'+
 						'<label for="greenhouse'+id+'_water_radio1">'+
 							'<div></div>'+
 							'<div class="water_timer"></div>'+
@@ -290,7 +272,7 @@ function createFarm(id) {
 							'<div class="sensor_value" data-value="0"></div>'+
 						'</div>'+
 					'</div>'+
-					'<div class="sensor_graph">'+
+					'<div class="sensor_graph" data-info="temp">'+
 						'<div class="graph_unit">&deg;C</div>'+
 						'<canvas id="greenhouse'+id+'_tempGraph" width="150" height="70"></canvas>'+
 					'</div>'+
@@ -302,7 +284,7 @@ function createFarm(id) {
 							'<div class="sensor_value" data-value="0"></div>'+
 						'</div>'+
 					'</div>'+
-					'<div class="sensor_graph">'+
+					'<div class="sensor_graph" data-info="hum">'+
 						'<div class="graph_unit">%</div>'+
 						'<canvas id="greenhouse'+id+'_humGraph" width="150" height="70"></canvas>'+
 					'</div>'+
@@ -314,7 +296,7 @@ function createFarm(id) {
 							'<div class="sensor_value" data-value="0"></div>'+
 						'</div>'+
 					'</div>'+
-					'<div class="sensor_graph">'+
+					'<div class="sensor_graph" data-info="soil">'+
 						'<div class="graph_unit">mm</div>'+
 						'<canvas id="greenhouse'+id+'_soilGraph" width="150" height="70"></canvas>'+
 					'</div>'+
@@ -329,24 +311,29 @@ function createFarm(id) {
 			'sendLampAction(event, '+id+');'+
 		'});'+
 		'$("#greenhouse'+id+' .sensor_graph").click(function () {'+
+			'ctx = $(this).find("canvas");'+
+			'if($(this).hasClass("fullScreenMode")) {'+
+				'myChart["greenhouse'+id+'"][$(this).data("info")].options.scales.yAxes[0].ticks.userCallback = function(value, index, values) {if(index == 0 || index == values.length-1) return value;};'+
+				'myChart["greenhouse'+id+'"][$(this).data("info")].options.scales.xAxes[0].time.displayFormats.hour = "H:mm";'+
+			'} else {'+
+				'myChart["greenhouse'+id+'"][$(this).data("info")].options.scales.yAxes[0].ticks.userCallback = null;'+
+				'myChart["greenhouse'+id+'"][$(this).data("info")].options.scales.xAxes[0].time.displayFormats.hour = "MMMM D, H:mm";'+
+			'}'+
+			'myChart["greenhouse'+id+'"][$(this).data("info")].update();'+
 			'$(this).toggleClass("fullScreenMode");'+
 		'});'+
 		'</script>';
 	$('.farms_holder').append(newFarm);
 	$(".page_content.nano").nanoScroller();
-	sensorsHistory['greenhouse'+id] = [];
-	//myChart['greenhouse'+id] = [];
-	sensorsHistory['greenhouse'+id]['temp'] = Array(30).fill(32);
-	sensorsHistory['greenhouse'+id]['hum'] = Array(30).fill(55);
-	sensorsHistory['greenhouse'+id]['soil'] = Array(30).fill(80);
+	myChart['greenhouse'+id] = [];
 	ctx = document.getElementById('greenhouse'+id+'_tempGraph').getContext('2d');
-	/*myChart['greenhouse'+id]['temp'] = new Chart(ctx, {
+	myChart['greenhouse'+id]['temp'] = new Chart(ctx, {
 		type: 'line',
 		data: {
-			labels: Array(30).fill(''),
+			labels: [],
 			datasets: [{
 				label: 'Temp',
-				data: sensorsHistory['greenhouse'+id]['temp'],
+				data: [],
 				fill: 'start',
 				pointRadius: 0,
 				backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -359,14 +346,17 @@ function createFarm(id) {
 	myChart['greenhouse'+id]['temp'].options.tooltips.callbacks.label = 
 		function(tooltipItem) { return tooltipItem.yLabel + '°C'; };
 	myChart['greenhouse'+id]['temp'].update();
+	setTimeout(function() {
+		eva_sfa_chart('greenhouse'+id+'_tempGraph','temp','sensor:greenhouse'+id+'/env/temp',{update:30},myChart['greenhouse'+id]['temp']);
+	}, 250);
 	ctx = document.getElementById('greenhouse'+id+'_humGraph').getContext('2d');
 	myChart['greenhouse'+id]['hum'] = new Chart(ctx, {
 		type: 'line',
 		data: {
-			labels: Array(30).fill(''),
+			labels: [],
 			datasets: [{
 				label: 'Hum',
-				data: sensorsHistory['greenhouse'+id]['hum'],
+				data: [],
 				fill: 'start',
 				pointRadius: 0,
 				backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -379,14 +369,17 @@ function createFarm(id) {
 	myChart['greenhouse'+id]['hum'].options.tooltips.callbacks.label = 
 		function(tooltipItem) { return tooltipItem.yLabel + '%'; };
 	myChart['greenhouse'+id]['hum'].update();
+	setTimeout(function() {
+		eva_sfa_chart('greenhouse'+id+'_humGraph','hum','sensor:greenhouse'+id+'/env/hum',{update:30},myChart['greenhouse'+id]['hum']);
+	}, 250);
 	ctx = document.getElementById('greenhouse'+id+'_soilGraph').getContext('2d');
 	myChart['greenhouse'+id]['soil'] = new Chart(ctx, {
 		type: 'line',
 		data: {
-			labels: Array(30).fill(''),
+			labels: [],
 			datasets: [{
 				label: 'Soil',
-				data: sensorsHistory['greenhouse'+id]['soil'],
+				data: [],
 				fill: 'start',
 				pointRadius: 0,
 				backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -398,6 +391,9 @@ function createFarm(id) {
 	myChart['greenhouse'+id]['soil'].options.scales.yAxes[0].ticks.max = 125;
 	myChart['greenhouse'+id]['soil'].options.tooltips.callbacks.label = 
 		function(tooltipItem) { return tooltipItem.yLabel + 'mm'; };
-	myChart['greenhouse'+id]['soil'].update();*/
+	myChart['greenhouse'+id]['soil'].update();
+	setTimeout(function() {
+		eva_sfa_chart('greenhouse'+id+'_soilGraph','soilm','sensor:greenhouse'+id+'/env/soilm',{update:30},myChart['greenhouse'+id]['soil']);
+	}, 250);
 }
 

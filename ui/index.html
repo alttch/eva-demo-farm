@@ -50,6 +50,7 @@
 	<script src="js/jquery.mobile.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/nanoscroller.js"></script>
+	<script src="js/moment.min.js"></script>
 	<script src="js/chart.min.js"></script>
 	<script src="js/tools.js"></script>
 	<script src="js/cookie.js"></script>
@@ -91,7 +92,6 @@
 	</script>
 
 	<script>
-		var sensorsHistory = [];
 		var chartOptions = {
 			legend: {
 				display: false
@@ -99,6 +99,7 @@
 			scales: {
 				yAxes: [{
 					ticks: {
+						maxTicksLimit: 5,
 						userCallback: function(value, index, values) {
 							if(index == 0 || index == values.length-1) return value;
 						},
@@ -109,9 +110,20 @@
 					},
 				}],
 				xAxes: [{
-					/*display: false,*/
+					type: 'time',
+					time: {
+						unit: 'hour',
+						unitStepSize: 1,
+						round: 'minute',
+						tooltipFormat: 'H:mm:ss',
+						displayFormats: {
+							hour: 'H:mm',
+						},
+					},
 					ticks: {
-						maxTicksLimit: 2,
+						maxTicksLimit: 12,
+						maxRotation: 0,
+						autoSkip: true,
 					},
 					gridLines: {
 						display: false,
@@ -141,8 +153,6 @@
 		};
 		//var ctx = document.getElementById("greenhouse1_tempGraph").getContext('2d');
 		var myChart = [];
-		function success_event() {
-		}
 	</script>
 </body>
 </html>
