@@ -70,6 +70,7 @@ services:
     image: altertech/eva-ics
     volumes:
         - ./ui:/ui
+        - ./data:/data
         - ./cfg:/deploy-cfg
     networks:
       eva_farm_ic:
