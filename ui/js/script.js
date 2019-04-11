@@ -197,7 +197,9 @@ function ui_set_water(state) {
 		if(state.nstatus == 1) {
 			setTimeout(function() {
 				var time = Math.round(eva_sfa_expires_in(state.group+'/timers/manual_watering'));
-				start_watering($('#'+$.escapeSelector(state.oid)+' input')[0], time);
+				if(time > -1) {
+					start_watering($('#'+$.escapeSelector(state.oid)+' input')[0], time);
+				}
 			},100);
 		} else {
 			stop_watering($('#'+$.escapeSelector(state.oid)+' input')[0]);
