@@ -339,7 +339,7 @@ function createFarm(id) {
 	myChart['greenhouse'+id]['tempInterval'] = setInterval(function() {
 		if($('#greenhouse'+id+'_tempGraph').is(':visible')) {
 			clearInterval(myChart['greenhouse'+id]['tempInterval']);
-			eva_sfa_chart('greenhouse'+id+'_tempGraph','temp','sensor:greenhouse'+id+'/env/temp',{update:30},myChart['greenhouse'+id]['temp']);
+			eva_sfa_chart('greenhouse'+id+'_tempGraph','temp','sensor:greenhouse'+id+'/env/temp',{update:30, fill: '10T'},myChart['greenhouse'+id]['temp']);
 		}
 	}, 100);
 	ctx = document.getElementById('greenhouse'+id+'_humGraph').getContext('2d');
@@ -365,7 +365,7 @@ function createFarm(id) {
 	myChart['greenhouse'+id]['humInterval'] = setInterval(function() {
 		if($('#greenhouse'+id+'_humGraph').is(':visible')) {
 			clearInterval(myChart['greenhouse'+id]['humInterval']);
-			eva_sfa_chart('greenhouse'+id+'_humGraph','hum','sensor:greenhouse'+id+'/env/hum',{update:30},myChart['greenhouse'+id]['hum']);
+			eva_sfa_chart('greenhouse'+id+'_humGraph','hum','sensor:greenhouse'+id+'/env/hum',{update:30, fill: '10T'},myChart['greenhouse'+id]['hum']);
 		}
 	}, 100);
 	ctx = document.getElementById('greenhouse'+id+'_soilGraph').getContext('2d');
@@ -391,7 +391,7 @@ function createFarm(id) {
 	myChart['greenhouse'+id]['soilInterval'] = setInterval(function() {
 		if($('#greenhouse'+id+'_soilGraph').is(':visible')) {
 			clearInterval(myChart['greenhouse'+id]['soilInterval']);
-			eva_sfa_chart('greenhouse'+id+'_soilGraph','soilm','sensor:greenhouse'+id+'/env/soilm',{update:30},myChart['greenhouse'+id]['soil']);
+			eva_sfa_chart('greenhouse'+id+'_soilGraph','soilm','sensor:greenhouse'+id+'/env/soilm',{update:30, fill: '10T'},myChart['greenhouse'+id]['soil']);
 		}
 	}, 100);
 }
