@@ -45,7 +45,7 @@
 .nano > .nano-pane {
   background : rgba(255, 255, 255, 0.5);
   position   : absolute;
-  width      : 6px;
+  width      : 12px;
   right      : -15px;
   top        : 0;
   bottom     : 0;
@@ -67,7 +67,7 @@
 .nano > .nano-pane > .nano-slider {
   background: rgba(0, 113, 189, 0.5);
   position              : relative;
-  margin                : 2px 1px;
+  margin                : 2px;
   -moz-border-radius    : 3px;
   -webkit-border-radius : 3px;
   border-radius         : 3px;
@@ -218,14 +218,14 @@ body {
 	background: rgba(255, 255, 255, 0.3);
 }
 .log_holder {
-	max-width: 450px;
+	max-width: 900px;
 	padding-right: 15px;
 	overflow: hidden;
 	background: rgba(255, 255, 255, 0.5);
 }
 .log_block .nano-content {
 	height: 100px;
-	padding-right: 15px;
+	padding-right: 25px;
 }
 .log_block p {
 	font: 12px 'Myriad Pro Regular';

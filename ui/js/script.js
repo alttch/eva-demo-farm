@@ -240,24 +240,12 @@ function createFarm(id) {
 							'<div></div>'+
 							'<div class="water_timer"></div>'+
 							'<div class="time_circle">'+
-								'<svg>'+
-									'<circle cx="63" cy="63" r="57" stroke="#fff" stroke-width="4" fill="#ccc"></circle>'+
-								'</svg>'+
-								'<svg class="circleFill">'+
-									'<circle cx="63" cy="63" r="28" stroke="rgba(255, 255, 255, 0.6)" stroke-width="56" fill="none"></circle>'+
-								'</svg>'+
-								'<svg>'+
-									'<circle cx="63" cy="63" r="57" stroke="#999" stroke-width="12" fill="none" stroke-dasharray="2 4"></circle>'+
-								'</svg>'+
-								'<svg class="borderFill0">'+
-									'<circle cx="63" cy="63" r="53" stroke="#ccc" stroke-width="4" fill="none"></circle>'+
-								'</svg>'+
-								'<svg class="borderFill1">'+
-									'<circle cx="63" cy="63" r="57" stroke="#fff" stroke-width="4" fill="none"></circle>'+
-								'</svg>'+
-								'<svg class="borderFill2">'+
-									'<circle cx="63" cy="63" r="61" stroke="#e6e6e6" stroke-width="4.2" fill="none"></circle>'+
-								'</svg>'+
+								'<svg><circle cx="63" cy="63" r="57" stroke="#fff" stroke-width="4" fill="#ccc"></circle></svg>'+
+								'<svg class="circleFill"><circle cx="63" cy="63" r="28" stroke="rgba(255, 255, 255, 0.6)" stroke-width="56" fill="none"></circle></svg>'+
+								'<svg><circle cx="63" cy="63" r="57" stroke="#999" stroke-width="12" fill="none" stroke-dasharray="2 4"></circle></svg>'+
+								'<svg class="borderFill0"><circle cx="63" cy="63" r="53" stroke="#ccc" stroke-width="4" fill="none"></circle></svg>'+
+								'<svg class="borderFill1"><circle cx="63" cy="63" r="57" stroke="#fff" stroke-width="4" fill="none"></circle></svg>'+
+								'<svg class="borderFill2"><circle cx="63" cy="63" r="61" stroke="#e6e6e6" stroke-width="4.2" fill="none"></circle></svg>'+
 							'</div>'+
 							'On'+
 						'</label>'+
@@ -348,9 +336,12 @@ function createFarm(id) {
 	myChart['greenhouse'+id]['temp'].options.tooltips.callbacks.label = 
 		function(tooltipItem) { return tooltipItem.yLabel + '°C'; };
 	myChart['greenhouse'+id]['temp'].update();
-	setTimeout(function() {
-		eva_sfa_chart('greenhouse'+id+'_tempGraph','temp','sensor:greenhouse'+id+'/env/temp',{update:30},myChart['greenhouse'+id]['temp']);
-	}, 250);
+	myChart['greenhouse'+id]['tempInterval'] = setInterval(function() {
+		if($('#greenhouse'+id+'_tempGraph').is(':visible')) {
+			clearInterval(myChart['greenhouse'+id]['tempInterval']);
+			eva_sfa_chart('greenhouse'+id+'_tempGraph','temp','sensor:greenhouse'+id+'/env/temp',{update:30},myChart['greenhouse'+id]['temp']);
+		}
+	}, 100);
 	ctx = document.getElementById('greenhouse'+id+'_humGraph').getContext('2d');
 	myChart['greenhouse'+id]['hum'] = new Chart(ctx, {
 		type: 'line',
@@ -371,9 +362,12 @@ function createFarm(id) {
 	myChart['greenhouse'+id]['hum'].options.tooltips.callbacks.label = 
 		function(tooltipItem) { return tooltipItem.yLabel + '%'; };
 	myChart['greenhouse'+id]['hum'].update();
-	setTimeout(function() {
-		eva_sfa_chart('greenhouse'+id+'_humGraph','hum','sensor:greenhouse'+id+'/env/hum',{update:30},myChart['greenhouse'+id]['hum']);
-	}, 250);
+	myChart['greenhouse'+id]['humInterval'] = setInterval(function() {
+		if($('#greenhouse'+id+'_humGraph').is(':visible')) {
+			clearInterval(myChart['greenhouse'+id]['humInterval']);
+			eva_sfa_chart('greenhouse'+id+'_humGraph','hum','sensor:greenhouse'+id+'/env/hum',{update:30},myChart['greenhouse'+id]['hum']);
+		}
+	}, 100);
 	ctx = document.getElementById('greenhouse'+id+'_soilGraph').getContext('2d');
 	myChart['greenhouse'+id]['soil'] = new Chart(ctx, {
 		type: 'line',
@@ -394,8 +388,11 @@ function createFarm(id) {
 	myChart['greenhouse'+id]['soil'].options.tooltips.callbacks.label = 
 		function(tooltipItem) { return tooltipItem.yLabel + 'mm'; };
 	myChart['greenhouse'+id]['soil'].update();
-	setTimeout(function() {
-		eva_sfa_chart('greenhouse'+id+'_soilGraph','soilm','sensor:greenhouse'+id+'/env/soilm',{update:30},myChart['greenhouse'+id]['soil']);
-	}, 250);
+	myChart['greenhouse'+id]['soilInterval'] = setInterval(function() {
+		if($('#greenhouse'+id+'_soilGraph').is(':visible')) {
+			clearInterval(myChart['greenhouse'+id]['soilInterval']);
+			eva_sfa_chart('greenhouse'+id+'_soilGraph','soilm','sensor:greenhouse'+id+'/env/soilm',{update:30},myChart['greenhouse'+id]['soil']);
+		}
+	}, 100);
 }
 
