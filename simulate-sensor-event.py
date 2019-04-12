@@ -10,6 +10,8 @@ ap.add_argument(
     help='Seconds since day start (0..86400)',
     type=int)
 ap.add_argument('-j', '--json', action='store_true', help='print JSON and exit')
+ap.add_argument(
+    '-k', '--api-key', metavar='KEY', help='API key (default: demo123)')
 args = ap.parse_args()
 
 greenhouses = 2
@@ -48,6 +50,8 @@ if args.json:
     print(json.dumps(data, indent=4, sort_keys=True))
     exit()
 
+api_key = args.api_key if args.api_key is not None else 'demo123'
+
 for gh in range(1, 3):
     from jsonrpcclient import request as jrpc
     from functools import partial
@@ -55,7 +59,7 @@ for gh in range(1, 3):
         jrpc,
         'http://10.27.12.10{}:8812/jrpc'.format(gh),
         'update',
-        k='demo123',
+        k=api_key,
         s=1)
     for k, v in data.items():
         result = rpc(i='sensor:greenhouse{}/env/{}'.format(gh, k), v=v)
