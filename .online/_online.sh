@@ -15,7 +15,7 @@ D=`realpath $D`
 
 sed "s/- MASTERKEY=.*/- MASTERKEY=${MASTERKEY}/g" docker-compose.yml | \
   sed "s/- DEFAULTKEY=.*/- DEFAULTKEY=${DEFAULTKEY}/g" | \
-  sed 's/hostname:/restart: always\n    hostname:/g' | \
+  sed 's/image:/restart: always\n    image:/g' | \
   grep -v $'ports:\n.*\- "8828:8828"' > docker-compose-online-demo.yml
 
 sh ./.online/_online-deploy.sh || exit 1
