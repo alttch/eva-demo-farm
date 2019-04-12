@@ -4,7 +4,8 @@ EVA ICS demo: Farm management
 Layout
 ======
 
-This demo deploys EVA ICS cluster to control virtual farm with two greenhouses.
+This demo deploys `EVA ICS <https://www.eva-ics.com/>`_ cluster to control
+virtual farm with two greenhouses.
 
 Each greenhouse has own Universal Controller instance, which collects data from
 sensors:
