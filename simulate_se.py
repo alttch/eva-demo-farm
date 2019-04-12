@@ -52,14 +52,14 @@ def main():
         d = datetime.datetime.now()
         stp = d.hour * 3600 + d.minute + d.second
 
+    data = simulate_data(stp)
+
     if args.json:
         import json
         print(json.dumps(data, indent=4, sort_keys=True))
         exit()
 
     api_key = args.api_key if args.api_key is not None else 'demo123'
-
-    data = simulate_data(stp)
 
     for gh in range(1, greenhouses + 1):
         from jsonrpcclient import request as jrpc
