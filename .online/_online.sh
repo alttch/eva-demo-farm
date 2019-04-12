@@ -1,4 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+
+if [ `whoami` != 'root' ]; then
+  echo "Please run me as root"
+  exit 2
+fi
 
 cd ..
 
