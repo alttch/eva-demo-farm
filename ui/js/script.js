@@ -169,6 +169,18 @@ function sendWateringAction(event, id) {
 function stopTimer(id) {
 	eva_sfa_clear('lvar:greenhouse'+id+'/timers/manual_watering');
 }
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
+}
 function eva_sfa_process_log_record(value) {
 	var log_class="";
 	if (value.l == 10) {
@@ -178,7 +190,10 @@ function eva_sfa_process_log_record(value) {
 	} else if (value.l == 40) {
 		log_class = 'error_log';
 	}
-	$('.log_block .nano-content').append('<p class="'+log_class+'">'+value.msg+'</p>');
+  var d = timeConverter(value.t);
+	$('.log_block .nano-content').append(
+    '<p class="'+log_class+'">'+d+' '+value.h+' '+value.p+' '+value.msg+'</p>'
+  );
 	$(".log_block .nano").nanoScroller();
 	$(".log_block .nano").nanoScroller({ scroll: 'bottom' });
 }
