@@ -602,7 +602,7 @@ body {
 	right: 5px;
 	width: 185px;
 	z-index: 1;
-	transition: 1s;
+	transition: .3s;
 }
 .graph_unit {
 	position: absolute;
@@ -610,7 +610,7 @@ body {
 	top: -5px;
 	font: 11px 'Myriad Pro Regular';
 	color: #808080;
-	transition: 1s;
+	transition: .3s;
 }
 .sensor_graph.fullScreenMode {
 	position: absolute;
@@ -693,7 +693,6 @@ body {
 		position: absolute;
 		right: 0;
 		margin: 5px 10px 0 0;
-		transition: 1s;
 		width: 150px;
 	}
 	.sensor_graph.fullScreenMode {
