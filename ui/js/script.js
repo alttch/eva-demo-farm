@@ -216,6 +216,7 @@ function ui_set_water(state) {
 			},100);
 		} else {
 			stop_watering_timer($('#'+$.escapeSelector(state.oid)+' input')[0]);
+			clearInterval(openWater[state.oid+'timer']);
 		}
 	}
 }
