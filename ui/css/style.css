@@ -436,6 +436,19 @@ body {
 	z-index: 1;
 	pointer-events: none;
 }
+.waterswitcher input:nth-of-type(1) + label > .stop_timer {
+	display: none;
+}
+.waterswitcher input:nth-of-type(1):checked + label > .stop_timer {
+	display: block;
+	position: absolute;
+	top: 53px;
+	left: 5px;
+	width: 40px;
+	font: 12px 'Myriad Pro Semibold';
+	z-index: 1;
+	cursor: pointer;
+}
 .waterswitcher input:nth-of-type(1) + label > .time_circle {
 	display: none;
 }
@@ -642,6 +655,7 @@ body {
 		left: 0;
 	}
 	.waterswitcher input:nth-of-type(1):checked + label > .water_timer,
+	.waterswitcher input:nth-of-type(1):checked + label > .stop_timer,
 	.waterswitcher input:nth-of-type(1):checked + label > .time_circle {
 		left: -15px;
 	}

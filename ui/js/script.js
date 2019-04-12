@@ -60,7 +60,7 @@ var openWater = [];
 		if(target.value == 1) {
 			start_watering(target);
 		} else {
-			stop_watering($(target).siblings('input')[0]);
+			stop_watering_timer($(target).siblings('input')[0]);
 		}
 	});
 	$('.sensor_graph').click(function () {
@@ -142,7 +142,7 @@ function start_watering(element, time) {
 		openWater[element.id] = null;
 	}, time * 1000);
 }
-function stop_watering(element) {
+function stop_watering_timer(element) {
 	clearTimeout(openWater[element.id]);
 	clearInterval(openWater[element.id+'timer']);
 	clearTimeout(openWater[element.id+'clock_timer']);
@@ -163,7 +163,11 @@ function sendWateringAction(event, id) {
 		eva_sfa_run('control/start_manual_watering',{a:id});
 	} else {
 		eva_sfa_run('automation/stop_pump',{a:id});
+		stopTimer(id);
 	}
+}
+function stopTimer(id) {
+	eva_sfa_clear('lvar:greenhouse'+id+'/timers/manual_watering');
 }
 function eva_sfa_process_log_record(value) {
 	var log_class="";
@@ -199,10 +203,19 @@ function ui_set_water(state) {
 				var time = Math.round(eva_sfa_expires_in(state.group+'/timers/manual_watering'));
 				if(time > -1) {
 					start_watering($('#'+$.escapeSelector(state.oid)+' input')[0], time);
+					openWater[state.oid+'timer'] = setInterval(function() {
+						var time_watering = Math.round(eva_sfa_expires_in(state.group+'/timers/manual_watering'));
+						if(time_watering < 0) {
+							stop_watering_timer($('#'+$.escapeSelector(state.oid)+' input')[0]);
+						} else if(time_watering > +$('#'+$.escapeSelector(state.oid)+' input + label .water_timer').html()) {
+							$('#'+$.escapeSelector(state.oid)+' input[value=1]').prop('checked', true);
+							start_watering($('#'+$.escapeSelector(state.oid)+' input')[0], time_watering);
+						}
+					}, 500);
 				}
 			},100);
 		} else {
-			stop_watering($('#'+$.escapeSelector(state.oid)+' input')[0]);
+			stop_watering_timer($('#'+$.escapeSelector(state.oid)+' input')[0]);
 		}
 	}
 }
@@ -247,6 +260,7 @@ function createFarm(id) {
 								'<svg class="borderFill1"><circle cx="63" cy="63" r="57" stroke="#fff" stroke-width="4" fill="none"></circle></svg>'+
 								'<svg class="borderFill2"><circle cx="63" cy="63" r="61" stroke="#e6e6e6" stroke-width="4.2" fill="none"></circle></svg>'+
 							'</div>'+
+							'<div class="stop_timer" onclick="stopTimer('+id+')">X</div>'+
 							'On'+
 						'</label>'+
 						'<input id="greenhouse'+id+'_water_radio2" type="radio" checked="true" name="greenhouse'+id+'_waterswitcher" value="0">'+
