@@ -1,1 +1,3 @@
 data/sfa_history.db
+docker-compose-online-demo.yml
+__pycache__
