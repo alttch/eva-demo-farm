@@ -82,19 +82,19 @@
       eva_sfa_register_update_state('unit:greenhouse*/pump', ui_set_water);
       var l = read_cookie("login");
       var p = read_cookie("password");
+      $('#login_form').submit(function(e) {
+        e.preventDefault();
+        eva_sfa_login = e.currentTarget.login.value;
+        eva_sfa_password = e.currentTarget.password.value;
+        var remember_me = e.currentTarget.remember_me.checked;
+      start_login(remember_me);
+      });
       if (l && p) {
         eva_sfa_login = l;
         eva_sfa_password = p;
         start_login();
       } else {
         show_login_form();
-        $('#login_form').submit(function(e) {
-          e.preventDefault();
-          eva_sfa_login = e.currentTarget.login.value;
-          eva_sfa_password = e.currentTarget.password.value;
-          var remember_me = e.currentTarget.remember_me.checked;
-          start_login(remember_me);
-        });
       }
     });
   </script>

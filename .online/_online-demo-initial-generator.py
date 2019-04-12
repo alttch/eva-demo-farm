@@ -15,7 +15,7 @@ import simulate_se
 d = datetime.datetime.now()
 stp = d.hour * 3600 + d.minute + d.second
 
-time_now = time.time()
+time_ds = time.time() - stp
 
 s = stp - 86400
 
@@ -37,7 +37,7 @@ while s <= stp:
                 sql('insert into state_history (space, t, oid, status, value) '
                     + 'values (:space, :t, :oid, :status, :value)'),
                 space='',
-                t=time_now + s,
+                t=time_ds + s,
                 oid=oid,
                 status=1,
                 value=v)
