@@ -37,9 +37,9 @@ def main():
         help='Seconds since day start (0..86400)',
         type=int)
     ap.add_argument(
-        '-j', '--json', action='store_true', help='print JSON and exit')
+        '-J', '--json', action='store_true', help='print JSON and exit')
     ap.add_argument(
-        '-k', '--api-key', metavar='KEY', help='API key (default: demo123)')
+        '-K', '--api-key', metavar='KEY', help='API key (default: demo123)')
     args = ap.parse_args()
 
     greenhouses = 2
