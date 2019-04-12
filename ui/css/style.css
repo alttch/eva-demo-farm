@@ -442,10 +442,10 @@ body {
 .waterswitcher input:nth-of-type(1):checked + label > .stop_timer {
 	display: block;
 	position: absolute;
-	top: 30px;
+	top: 32px;
 	left: 5px;
 	width: 40px;
-	font: 12px 'Myriad Pro Semibold';
+	font: 10px 'Myriad Pro Semibold';
 	z-index: 1;
 	cursor: pointer;
 }
