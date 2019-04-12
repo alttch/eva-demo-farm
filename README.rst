@@ -1,6 +1,11 @@
 EVA ICS demo: Farm management
 *****************************
 
+Live demo
+=========
+
+@ https://farm.demo.eva-ics.com/
+
 Layout
 ======
 
