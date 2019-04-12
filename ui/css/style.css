@@ -429,7 +429,7 @@ body {
 .waterswitcher input:nth-of-type(1):checked + label > .water_timer {
 	display: block;
 	position: absolute;
-	top: 24px;
+	top: 18px;
 	left: 5px;
 	width: 40px;
 	font: 12px 'Myriad Pro Semibold';
@@ -442,7 +442,7 @@ body {
 .waterswitcher input:nth-of-type(1):checked + label > .stop_timer {
 	display: block;
 	position: absolute;
-	top: 53px;
+	top: 30px;
 	left: 5px;
 	width: 40px;
 	font: 12px 'Myriad Pro Semibold';
@@ -464,6 +464,11 @@ body {
 	background: #e6e6e6;
 	border-radius: 124px;
 	pointer-events: none;
+}
+.waterswitcher input:nth-of-type(1) + label.hidden_timer > .water_timer,
+.waterswitcher input:nth-of-type(1) + label.hidden_timer > .stop_timer,
+.waterswitcher input:nth-of-type(1) + label.hidden_timer > .time_circle {
+	display: none;
 }
 .waterswitcher input:nth-of-type(1) + label > .time_circle svg {
 	position: absolute;
