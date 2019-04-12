@@ -252,7 +252,7 @@ body {
 }
 .page_content {
 	display: none;
-	margin-top: 150px;
+	margin-top: 190px;
 	height: 100%;
 }
 .farms_holder + .nano-pane {
@@ -529,6 +529,7 @@ body {
 }
 .sensor_holder {
 	padding-left: 25px;
+	padding-bottom: 90px;
 	background: url(../images/temperature.svg) 8px 15px no-repeat;
 	background-size: 15px;
 }
@@ -596,8 +597,12 @@ body {
 	color: #333;
 }
 .sensor_graph {
-	position: relative;
+	position: absolute;
 	cursor: pointer;
+	right: 5px;
+	width: 185px;
+	z-index: 1;
+	transition: 1s;
 }
 .graph_unit {
 	position: absolute;
@@ -605,22 +610,29 @@ body {
 	top: -5px;
 	font: 11px 'Myriad Pro Regular';
 	color: #808080;
+	transition: 1s;
 }
 .sensor_graph.fullScreenMode {
 	position: absolute;
 	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	padding: 100px 5px 0 0;
+	margin: 0;
+	padding: 185px 5px 185px 0;
 	border-radius: 10px;
 	background: #e6e6e6;
-	z-index: 1;
+	z-index: 2;
 }
 .sensor_graph.fullScreenMode .graph_unit {
-	right: 10px;
-	top: 100px;
+	transform: translate(-5px, 190px);
 	font-size: 14px;
+}
+.temp_holder .sensor_graph.fullScreenMode {
+	transform: translate(5px, -90px);
+}
+.hum_holder .sensor_graph.fullScreenMode {
+	transform: translate(5px, -260px);
+}
+.soil_holder .sensor_graph.fullScreenMode {
+	transform: translate(5px, -425px);
 }
 
 @media (min-width: 426px) {	
@@ -666,6 +678,7 @@ body {
 	.sensor_holder {
 		display: flex;
 		padding-left: 35px;
+		padding-bottom: 0;
 	}
 	.hum_holder, .soil_holder {
 		margin-top: 5px;
@@ -676,15 +689,28 @@ body {
 		width: 150px;
 	}
 	.sensor_graph {
+		position: absolute;
+		right: 0;
+		margin: 5px 10px 0 0;
+		transition: 1s;
 		width: 150px;
-		margin-top: auto;
-		margin-left: auto;
 	}
 	.sensor_graph.fullScreenMode {
 		padding: 10px 7px;
+		top: inherit;
+		height: auto;
+	}
+	.temp_holder .sensor_graph.fullScreenMode {
+		transform: translateY(-20px);
+	}
+	.hum_holder .sensor_graph.fullScreenMode {
+		transform: translateY(-100px);
+	}
+	.soil_holder .sensor_graph.fullScreenMode {
+		transform: translateY(-180px);
 	}
 	.sensor_graph.fullScreenMode .graph_unit {
-		top: 20px;
+		transform: translate(-5px, 25px);
 	}
 }
 

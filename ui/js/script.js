@@ -50,7 +50,7 @@ function logout() {
 	document.location.reload();
 }
 var openWater = [];
-$(document).ready(function() {
+/*$(document).ready(function() {
 	$('.waterswitcher input').click(function (event) {
 		var target = event.currentTarget;
 		if(typeof(openWater[target.id]) == "undefined" 
@@ -66,7 +66,7 @@ $(document).ready(function() {
 	$('.sensor_graph').click(function () {
 		$(this).toggleClass('fullScreenMode');
 	});
-});
+});*/
 function start_watering(element, time) {
 	if(openWater[element.id] != null) {
 		clearTimeout(openWater[element.id]);
