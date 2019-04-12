@@ -181,7 +181,7 @@ function timeConverter(UNIX_timestamp){
   var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
   return time;
 }
-function eva_sfa_process_log_record(value) {
+function process_log_record(value) {
 	var log_class="";
 	if (value.l == 10) {
 		log_class = 'debug_log';
@@ -192,7 +192,7 @@ function eva_sfa_process_log_record(value) {
 	}
   var d = timeConverter(value.t);
 	$('.log_block .nano-content').append(
-    '<p class="'+log_class+'">'+d+' '+value.h+' '+value.p+' '+value.msg+'</p>'
+    '<p class="'+log_class+'">'+d+' '+value.p+'/'+value.h+' '+value.msg+'</p>'
   );
 	$(".log_block .nano").nanoScroller();
 	$(".log_block .nano").nanoScroller({ scroll: 'bottom' });

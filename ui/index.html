@@ -70,8 +70,9 @@
       for (var i=1; i<=greenHouseNumber; i++) {
         createFarm(i);
       }
-      eva_sfa_cb_login_success = after_login
-      eva_sfa_cb_login_error = failed_login
+      eva_sfa_cb_login_success = after_login;
+      eva_sfa_cb_login_error = failed_login;
+      eva_sfa_process_log_record = process_log_record;
       eva_sfa_init();
       eva_sfa_register_update_state('sensor:greenhouse*/env/temp', ui_set_sensor);
       eva_sfa_register_update_state('sensor:greenhouse*/env/hum', ui_set_sensor);
