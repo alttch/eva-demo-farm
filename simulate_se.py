@@ -13,7 +13,7 @@ def simulate_data(stp):
     h_min = 45
     h_max = 65
 
-    s_min = 80
+    s_min = 70
     s_max = 115
 
     ldr = '1' if _stp > 25000 else '0'
