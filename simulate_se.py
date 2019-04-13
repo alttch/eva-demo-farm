@@ -61,9 +61,10 @@ def main():
 
     api_key = args.api_key if args.api_key is not None else 'demo123'
 
+    from jsonrpcclient import request as jrpc
+    from functools import partial
+
     for gh in range(1, greenhouses + 1):
-        from jsonrpcclient import request as jrpc
-        from functools import partial
         rpc = partial(
             jrpc,
             'http://10.27.12.10{}:8812/jrpc'.format(gh),
