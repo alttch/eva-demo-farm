@@ -100,8 +100,6 @@ The port **8828** is also mapped to main host.
 UI
 --
 
-(under development)
-
 http://10.27.12.199:8828
 
 SFA user credentials:
