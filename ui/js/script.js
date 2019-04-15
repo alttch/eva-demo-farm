@@ -213,9 +213,12 @@ function timeConverter(UNIX_timestamp) {
   var year = a.getFullYear();
   var month = months[a.getMonth()];
   var date = a.getDate();
-  var hour = a.getHours();
-  var min = a.getMinutes();
-  var sec = a.getSeconds();
+  var hour = String(a.getHours());
+  var min = String(a.getMinutes());
+  var sec = String(a.getSeconds());
+  if (hour.length < 2) hour = '0' + hour;
+  if (min.length < 2) min = '0' + min;
+  if (sec.length < 2) sec = '0' + sec;
   var time =
     date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
   return time;
