@@ -7,6 +7,8 @@ fi
 
 cd ..
 
+docker-compose -f docker-compose-online-demo.yml down -t 0
+
 MASTERKEY=`head -1024 /dev/urandom | sha256sum | awk '{ print $1 }'`
 DEFAULTKEY=`head -1024 /dev/urandom | sha256sum | awk '{ print $1 }'`
 
