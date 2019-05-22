@@ -239,11 +239,20 @@ function process_log_record(value) {
       '">' +
       d +
       ' ' +
-      value.p +
+      value.p
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;') +
       '/' +
-      value.h +
+      value.h
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;') +
       ' ' +
-      value.msg +
+      value.msg
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;') +
       '</p>'
   );
   $('.log_block .nano').nanoScroller();
