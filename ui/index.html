@@ -93,7 +93,11 @@
         eva_sfa_password = p;
         start_login();
       } else {
-        show_login_form();
+        if (navigator.userAgent.startsWith('evaHI ')) {
+          start_login(false);
+        } else {
+          show_login_form();
+        }
       }
     });
   </script>
