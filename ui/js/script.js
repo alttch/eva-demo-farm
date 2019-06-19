@@ -535,7 +535,7 @@ function createFarm(id) {
     ctx,
     cfg,
     'sensor:greenhouse' + id + '/env/temp',
-    {update: 60, fill: '10T:1', u: '°C'}
+    {update: 60, fill: '10T:1', units: '°C'}
   );
   myChart['greenhouse' + id]['temp'].update();
   $('#sensor-graph-temp-' + id).attr('greenhouse-id', 'greenhouse' + id);
@@ -564,7 +564,7 @@ function createFarm(id) {
     ctx,
     cfg,
     'sensor:greenhouse' + id + '/env/hum',
-    {update: 60, fill: '10T:1', u: '%'}
+    {update: 60, fill: '10T:1', units: '%'}
   );
   myChart['greenhouse' + id]['hum'].update();
   $('#sensor-graph-hum-' + id).attr('greenhouse-id', 'greenhouse' + id);
@@ -593,7 +593,7 @@ function createFarm(id) {
     ctx,
     cfg,
     'sensor:greenhouse' + id + '/env/soilm',
-    {update: 60, fill: '10T:1', u: ' mm'}
+    {update: 60, fill: '10T:1', units: ' mm'}
   );
   myChart['greenhouse' + id]['soil'].update();
   $('#sensor-graph-soil-' + id).attr('greenhouse-id', 'greenhouse' + id);
