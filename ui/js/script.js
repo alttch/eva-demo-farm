@@ -5,15 +5,13 @@ function show_login_form() {
 function hide_login_form() {
   $('.dialog_window_holder.login_window').hide();
 }
-
 function start_login(rme) {
   if (rme) {
-    create_cookie('login', eva_sfa_login, 365, '/ui/');
-    create_cookie('password', eva_sfa_password, 365, '/ui/');
+    $cookies.create('login', $eva.login, 365, '/ui/');
+    $cookies.create('password', $eva.password, 365, '/ui/');
   }
-  eva_sfa_start();
+  $eva.start();
 }
-
 function after_login() {
   $('#login_error').hide();
   hide_login_form();
@@ -21,9 +19,8 @@ function after_login() {
   $('.page_content').show();
   enableScroll();
   $('.log_block .nano').nanoScroller({scroll: 'bottom'});
-  eva_sfa_log_start(20);
+  $eva.log_start(20);
 }
-
 function failed_login(code, msg, data) {
   clear_cookies();
   $('#login_error').html(msg);
@@ -32,7 +29,6 @@ function failed_login(code, msg, data) {
   $('#login_error').show();
   show_login_form();
 }
-
 function enableScroll(e) {
   var time = 1;
   if (e) {
@@ -43,12 +39,12 @@ function enableScroll(e) {
   }, time);
 }
 function clear_cookies() {
-  create_cookie('login', '', 365, '/ui/');
-  create_cookie('password', '', 365, '/ui/');
+  $cookies.erase('login', '/ui/');
+  $cookies.erase('password', '/ui/');
 }
 function logout() {
   clear_cookies();
-  eva_sfa_stop();
+  $eva.stop();
   document.location.reload();
 }
 var openWater = [];
@@ -185,14 +181,15 @@ function sendWateringAction(event, id) {
   event.preventDefault();
   var target = event.currentTarget;
   if (target.value == 1) {
-    eva_sfa_run('control/start_manual_watering', {a: id});
+    $eva.call('run', 'control/start_manual_watering', {a: id});
   } else {
-    eva_sfa_run('automation/stop_pump', {a: id});
+    $eva.call('run', 'automation/stop_pump', {a: id});
     stopTimer(id);
   }
 }
 function stopTimer(id) {
-  eva_sfa_clear('lvar:greenhouse' + id + '/timers/manual_watering');
+  $eva.call('clear', 'lvar:greenhouse' + id + '/timers/manual_watering')
+    .catch(function(err){});
 }
 function timeConverter(UNIX_timestamp) {
   var a = new Date(UNIX_timestamp * 1000);
@@ -269,7 +266,7 @@ function ui_set_lamp(state) {
 function sendLampAction(event, id) {
   event.preventDefault();
   var value = $('#' + event.target.getAttribute('for')).val();
-  eva_sfa_action('unit:greenhouse' + id + '/lamp', {s: value});
+  $eva.call('action', 'unit:greenhouse' + id + '/lamp', {s: value});
 }
 function ui_set_water(state) {
   $(
@@ -280,7 +277,7 @@ function ui_set_water(state) {
       $('#' + $.escapeSelector(state.oid) + ' label').addClass('hidden_timer');
       setTimeout(function() {
         var time = Math.round(
-          eva_sfa_expires_in(state.group + '/timers/manual_watering')
+          $eva.expires_in(state.group + '/timers/manual_watering')
         );
         if (time > -1) {
           $('#' + $.escapeSelector(state.oid) + ' label').removeClass(
@@ -293,7 +290,7 @@ function ui_set_water(state) {
         }
         openWater[state.oid + 'timer'] = setInterval(function() {
           var time_watering = Math.round(
-            eva_sfa_expires_in(state.group + '/timers/manual_watering')
+            $eva.expires_in(state.group + '/timers/manual_watering')
           );
           if (time_watering < 0) {
             stop_watering_timer(
@@ -538,7 +535,7 @@ function createFarm(id) {
   myChart['greenhouse' + id]['tempInterval'] = setInterval(function() {
     if ($('#greenhouse' + id + '_tempGraph').is(':visible')) {
       clearInterval(myChart['greenhouse' + id]['tempInterval']);
-      eva_sfa_chart(
+      $eva.toolbox.chart(
         'greenhouse' + id + '_tempGraph',
         'temp',
         'sensor:greenhouse' + id + '/env/temp',
@@ -577,7 +574,7 @@ function createFarm(id) {
   myChart['greenhouse' + id]['humInterval'] = setInterval(function() {
     if ($('#greenhouse' + id + '_humGraph').is(':visible')) {
       clearInterval(myChart['greenhouse' + id]['humInterval']);
-      eva_sfa_chart(
+      $eva.toolbox.chart(
         'greenhouse' + id + '_humGraph',
         'hum',
         'sensor:greenhouse' + id + '/env/hum',
@@ -616,7 +613,7 @@ function createFarm(id) {
   myChart['greenhouse' + id]['soilInterval'] = setInterval(function() {
     if ($('#greenhouse' + id + '_soilGraph').is(':visible')) {
       clearInterval(myChart['greenhouse' + id]['soilInterval']);
-      eva_sfa_chart(
+      $eva.toolbox.chart(
         'greenhouse' + id + '_soilGraph',
         'soilm',
         'sensor:greenhouse' + id + '/env/soilm',
