@@ -20,10 +20,25 @@ function after_login() {
   enableScroll();
   $('.log_block .nano').nanoScroller({scroll: 'bottom'});
   $eva.log_start(20);
+  $('.farms_holder').html('');
+  var greenHouseNumber = 2;
+  for (var i = 1; i <= greenHouseNumber; i++) {
+    createFarm(i);
+  }
+  $eva.watch('sensor:greenhouse*/env/temp', ui_set_sensor);
+  $eva.watch('sensor:greenhouse*/env/hum', ui_set_sensor);
+  $eva.watch('sensor:greenhouse*/env/soilm', ui_set_sensor);
+  $eva.watch('sensor:greenhouse*/env/ldr', ui_set_bright);
+  $eva.watch('unit:greenhouse*/lamp', ui_set_lamp);
+  $eva.watch('unit:greenhouse*/pump', ui_set_water);
 }
-function failed_login(code, msg, data) {
+function failed_login(err) {
   clear_cookies();
-  $('#login_error').html(msg);
+  if (err) {
+    $('#login_error').html(err.message);
+  } else {
+    $('#login_error').html('');
+  }
   $('#password').value = '';
   $('.login_window #login').focus();
   $('#login_error').show();
@@ -161,6 +176,7 @@ function start_watering(element, time) {
   }, time * 1000);
 }
 function stop_watering_timer(element) {
+  if (!element) return;
   clearTimeout(openWater[element.id]);
   clearInterval(openWater[element.id + 'timer']);
   clearTimeout(openWater[element.id + 'clock_timer']);
@@ -188,8 +204,9 @@ function sendWateringAction(event, id) {
   }
 }
 function stopTimer(id) {
-  $eva.call('clear', 'lvar:greenhouse' + id + '/timers/manual_watering')
-    .catch(function(err){});
+  $eva
+    .call('clear', 'lvar:greenhouse' + id + '/timers/manual_watering')
+    .catch(function(err) {});
 }
 function timeConverter(UNIX_timestamp) {
   var a = new Date(UNIX_timestamp * 1000);
@@ -421,11 +438,13 @@ function createFarm(id) {
     '<div class="sensor_value" data-value="0"></div>' +
     '</div>' +
     '</div>' +
-    '<div class="sensor_graph" data-info="temp">' +
-    '<div class="graph_unit">&deg;C</div>' +
-    '<canvas id="greenhouse' +
+    '<div class="sensor_graph" data-info="temp" id="sensor-graph-temp-' +
     id +
-    '_tempGraph" width="150" height="70"></canvas>' +
+    '">' +
+    '<div class="graph_unit">&deg;C</div>' +
+    '<div id="greenhouse' +
+    id +
+    '_tempGraph" class="graph_container"></div>' +
     '</div>' +
     '</div>' +
     '<div class="sensor_holder hum_holder">' +
@@ -461,54 +480,45 @@ function createFarm(id) {
     '</div>' +
     '</div>' +
     '</div>' +
-    '</div>' +
-    '<script>' +
-    '$("#greenhouse' +
-    id +
-    ' .waterswitcher input").click(function (event) {' +
-    'sendWateringAction(event,' +
-    id +
-    ')' +
-    '});' +
-    '$("#greenhouse' +
-    id +
-    ' .lightswitcher label").click(function (event) {' +
-    'sendLampAction(event, ' +
-    id +
-    ');' +
-    '});' +
-    '$("#greenhouse' +
-    id +
-    ' .sensor_graph").click(function () {' +
-    'ctx = $(this).find("canvas");' +
-    'if($(this).hasClass("fullScreenMode")) {' +
-    'myChart["greenhouse' +
-    id +
-    '"][$(this).data("info")].options.scales.yAxes[0].ticks.userCallback = function(value, index, values) {if(index == 0 || index == values.length-1) return value;};' +
-    'myChart["greenhouse' +
-    id +
-    '"][$(this).data("info")].options.scales.xAxes[0].time.displayFormats.hour = "H:mm";' +
-    '} else {' +
-    'myChart["greenhouse' +
-    id +
-    '"][$(this).data("info")].options.scales.yAxes[0].ticks.userCallback = null;' +
-    'myChart["greenhouse' +
-    id +
-    '"][$(this).data("info")].options.scales.xAxes[0].time.displayFormats.hour = "MMMM D, H:mm";' +
-    '}' +
-    'myChart["greenhouse' +
-    id +
-    '"][$(this).data("info")].update();' +
-    '$(this).toggleClass("fullScreenMode");' +
-    '});' +
-    '</script>';
+    '</div>';
+  //'<script>' +
+  //'$("#greenhouse' +
+  //id +
+  //' .sensor_graph").click(function () {' +
+  //'ctx = $(this).find("div");' +
+  //'if($(this).hasClass("fullScreenMode")) {' +
+  //'myChart["greenhouse' +
+  //id +
+  //'"][$(this).data("info")].options.scales.yAxes[0].ticks.userCallback = function(value, index, values) {if(index == 0 || index == values.length-1) return value;};' +
+  //'myChart["greenhouse' +
+  //id +
+  //'"][$(this).data("info")].options.scales.xAxes[0].time.displayFormats.hour = "H:mm";' +
+  //'} else {' +
+  //'myChart["greenhouse' +
+  //id +
+  //'"][$(this).data("info")].options.scales.yAxes[0].ticks.userCallback = null;' +
+  //'myChart["greenhouse' +
+  //id +
+  //'"][$(this).data("info")].options.scales.xAxes[0].time.displayFormats.hour = "MMMM D, H:mm";' +
+  //'}' +
+  //'myChart["greenhouse' +
+  //id +
+  //'"][$(this).data("info")].update();' +
+  //'$(this).toggleClass("fullScreenMode");' +
+  //'});' +
+  //'</script>';
   $('.farms_holder').append(newFarm);
   $('.page_content.nano').nanoScroller();
+  $('#greenhouse' + id + ' .waterswitcher input').click(function(event) {
+    sendWateringAction(event, id);
+  });
+  $('#greenhouse' + id + ' .lightswitcher label').click(function(event) {
+    sendLampAction(event, id);
+  });
   myChart['greenhouse' + id] = [];
-  ctx = document
-    .getElementById('greenhouse' + id + '_tempGraph')
-    .getContext('2d');
-  myChart['greenhouse' + id]['temp'] = new Chart(ctx, {
+  ctx = 'greenhouse' + id + '_tempGraph';
+  //myChart['greenhouse' + id]['temp'] =
+  var cfg = {
     type: 'line',
     data: {
       labels: [],
@@ -522,28 +532,57 @@ function createFarm(id) {
         }
       ]
     },
-    options: chartOptions
-  });
-  myChart['greenhouse' + id]['temp'].options.scales.yAxes[0].ticks.min = 0;
-  myChart['greenhouse' + id]['temp'].options.scales.yAxes[0].ticks.max = 50;
-  myChart['greenhouse' + id][
-    'temp'
-  ].options.tooltips.callbacks.label = function(tooltipItem) {
-    return tooltipItem.yLabel + '°C';
+    options: get_chart_options()
   };
+  cfg.options.scales.yAxes[0].ticks.min = 0;
+  cfg.options.scales.yAxes[0].ticks.max = 50;
+  myChart['greenhouse' + id]['temp'] = $eva.toolbox.chart(
+    ctx,
+    cfg,
+    'sensor:greenhouse' + id + '/env/temp',
+    {update: 60, fill: '10T:1', u: '°C'}
+  );
   myChart['greenhouse' + id]['temp'].update();
-  myChart['greenhouse' + id]['tempInterval'] = setInterval(function() {
-    if ($('#greenhouse' + id + '_tempGraph').is(':visible')) {
-      clearInterval(myChart['greenhouse' + id]['tempInterval']);
-      $eva.toolbox.chart(
-        'greenhouse' + id + '_tempGraph',
-        null,
-        'sensor:greenhouse' + id + '/env/temp',
-        {update: 30, fill: '10T:1'},
-        myChart['greenhouse' + id]['temp']
-      );
+  $('#sensor-graph-temp-' + id).attr('greenhouse-id', 'greenhouse' + id);
+  $('#sensor-graph-temp-' + id).on('click', function() {
+    let g_id = $(this).attr('greenhouse-id');
+    let ch_id = $(this).attr('data-info');
+    let c = myChart[g_id][ch_id];
+    if ($(this).hasClass('fullScreenMode')) {
+      c.options.scales.xAxes[0].time.displayFormats.hour = 'H:mm';
+      c.options.scales.xAxes[0].ticks.maxTicksLimit = 3;
+      c.options.scales.yAxes[0].ticks.userCallback = function(value, index, values) {
+        if(index == 0 || index == values.length-1) return value;
+      }
+    } else {
+      c.options.scales.xAxes[0].time.displayFormats.hour = 'MMMM D, H:mm';
+      c.options.scales.xAxes[0].ticks.maxTicksLimit = 10;
+      c.options.scales.yAxes[0].ticks.userCallback = null;
     }
-  }, 100);
+    $(this).toggleClass('fullScreenMode');
+    $(this)
+      .find('.graph_container')
+      .toggleClass('fullScreenMode');
+    c.update();
+  });
+  return;
+  //cfg.options.tooltips.callbacks.label = function(tooltipItem) {
+  //return tooltipItem.yLabel + '°C';
+  //};
+  //myChart['greenhouse' + id]['temp'].update();
+  //myChart['greenhouse' + id]['tempInterval'] = setInterval(function() {
+  //if ($('#greenhouse' + id + '_tempGraph').is(':visible')) {
+  //clearInterval(myChart['greenhouse' + id]['tempInterval']);
+  //$eva.toolbox.chart(
+  //'greenhouse' + id + '_tempGraph',
+  //'temp',
+  //'sensor:greenhouse' + id + '/env/temp',
+  //{update: 30, fill: '10T:1'},
+  //myChart['greenhouse' + id]['temp']
+  //);
+  //}
+  //}, 100);
+  return;
   ctx = document
     .getElementById('greenhouse' + id + '_humGraph')
     .getContext('2d');
@@ -576,7 +615,7 @@ function createFarm(id) {
       clearInterval(myChart['greenhouse' + id]['humInterval']);
       $eva.toolbox.chart(
         'greenhouse' + id + '_humGraph',
-        null,
+        'hum',
         'sensor:greenhouse' + id + '/env/hum',
         {update: 30, fill: '10T:1'},
         myChart['greenhouse' + id]['hum']

@@ -61,20 +61,15 @@
     //ws_mode = false;
 
     $(document).ready(function() {
-      var greenHouseNumber = 2;
-      for (var i=1; i<=greenHouseNumber; i++) {
-        createFarm(i);
-      }
+      var first_login = true;
       $eva.debug = true;
       $eva.on('login.success', after_login);
-      $eva.on('login.failed', failed_login);
+      $eva.on('login.failed', function(err) {
+        show_login_form();
+        failed_login(first_login?null:err);
+      });
       $eva.on('log.record', process_log_record);
-      $eva.watch('sensor:greenhouse*/env/temp', ui_set_sensor);
-      $eva.watch('sensor:greenhouse*/env/hum', ui_set_sensor);
-      $eva.watch('sensor:greenhouse*/env/soilm', ui_set_sensor);
-      $eva.watch('sensor:greenhouse*/env/ldr', ui_set_bright);
-      $eva.watch('unit:greenhouse*/lamp', ui_set_lamp);
-      $eva.watch('unit:greenhouse*/pump', ui_set_water);
+      var first_login = true;
       var l = $cookies.read("login");
       var p = $cookies.read("password");
       $('#login_form').submit(function(e) {
@@ -82,81 +77,75 @@
         $eva.login = e.currentTarget.login.value;
         $eva.password = e.currentTarget.password.value;
         var remember_me = e.currentTarget.remember_me.checked;
-      start_login(remember_me);
+        start_login(remember_me);
       });
       if (l && p) {
         $eva.login = l;
         $eva.password = p;
-        start_login();
-      } else {
-        if ($eva.in_evaHI) {
-          start_login(false);
-        } else {
-          show_login_form();
-        }
       }
+      start_login(false);
     });
   </script>
 
   <script>
-    var chartOptions = {
-      legend: {
-        display: false
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            maxTicksLimit: 5,
-            userCallback: function(value, index, values) {
-              if(index == 0 || index == values.length-1) return value;
+    function get_chart_options() {
+    return {
+        maintainAspectRatio: false,
+        legend: {
+          display: false
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              maxTicksLimit: 5,
             },
-          },
-          gridLines: {
-            display: false,
-            zeroLineColor: '#b3b3b3',
-          },
-        }],
-        xAxes: [{
-          type: 'time',
-          time: {
-            unit: 'hour',
-            unitStepSize: 1,
-            round: 'minute',
-            tooltipFormat: 'H:mm:ss',
-            displayFormats: {
-              hour: 'H:mm',
+            gridLines: {
+              display: false,
+              zeroLineColor: '#b3b3b3',
             },
-          },
-          ticks: {
-            maxTicksLimit: 12,
-            maxRotation: 0,
-            autoSkip: true,
-          },
-          gridLines: {
-            display: false,
-            zeroLineColor: '#b3b3b3',
-          },
-        }],
-      },
-      plugins: {
-        filler: {
-          propagate: true
-        }
-      },
-      elements: {
-        line: {
-          tension: 0, // disables bezier curves
-          borderWidth: 1,
-          borderColor: 'rgba(144,144,144,1)'
-        }
-      },
-      tooltips: {
-        mode: 'index',
-        intersect: false,
-      },
-      animation: {
-        duration: 0, // general animation time
-      },
+          }],
+          xAxes: [{
+            type: 'time',
+            time: {
+              unit: 'hour',
+              unitStepSize: 1,
+              round: 'minute',
+              tooltipFormat: 'H:mm:ss',
+              displayFormats: {
+                hour: 'H:mm',
+              },
+            },
+            ticks: {
+              maxTicksLimit: 3,
+              maxRotation: 0,
+              autoSkip: true,
+            },
+            gridLines: {
+              display: false,
+              zeroLineColor: '#b3b3b3',
+            },
+          }],
+        },
+        plugins: {
+          filler: {
+            propagate: true
+          }
+        },
+        elements: {
+          line: {
+            tension: 0, // disables bezier curves
+            borderWidth: 1,
+            borderColor: 'rgba(144,144,144,1)'
+          }
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+        },
+        animation: {
+          duration: 0, // general animation time
+        },
+      };
     };
     //var ctx = document.getElementById("greenhouse1_tempGraph").getContext('2d');
     var myChart = [];
