@@ -537,7 +537,7 @@ function createFarm(id) {
       clearInterval(myChart['greenhouse' + id]['tempInterval']);
       $eva.toolbox.chart(
         'greenhouse' + id + '_tempGraph',
-        'temp',
+        null,
         'sensor:greenhouse' + id + '/env/temp',
         {update: 30, fill: '10T:1'},
         myChart['greenhouse' + id]['temp']
@@ -576,7 +576,7 @@ function createFarm(id) {
       clearInterval(myChart['greenhouse' + id]['humInterval']);
       $eva.toolbox.chart(
         'greenhouse' + id + '_humGraph',
-        'hum',
+        null,
         'sensor:greenhouse' + id + '/env/hum',
         {update: 30, fill: '10T:1'},
         myChart['greenhouse' + id]['hum']
@@ -615,7 +615,7 @@ function createFarm(id) {
       clearInterval(myChart['greenhouse' + id]['soilInterval']);
       $eva.toolbox.chart(
         'greenhouse' + id + '_soilGraph',
-        'soilm',
+        null,
         'sensor:greenhouse' + id + '/env/soilm',
         {update: 30, fill: '10T:1'},
         myChart['greenhouse' + id]['soil']

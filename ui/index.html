@@ -65,6 +65,7 @@
       for (var i=1; i<=greenHouseNumber; i++) {
         createFarm(i);
       }
+      $eva.debug = true;
       $eva.on('login.success', after_login);
       $eva.on('login.failed', failed_login);
       $eva.on('log.record', process_log_record);

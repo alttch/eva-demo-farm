@@ -5,15 +5,6 @@
  * Version: 3.1.0
  */
 
-function load_animation(o) {
-  $('#' + o).html(
-    '<div class="cssload-square"><div ' +
-      'class="cssload-square-part cssload-square-green">' +
-      '</div><div class="cssload-square-part cssload-square-pink">' +
-      '</div><div class="cssload-square-blend"></div></div>'
-  );
-}
-
 function get_arg(name) {
   url = window.location.href;
   name = name.replace(/[\[\]]/g, '\\$&');
