@@ -456,11 +456,13 @@ function createFarm(id) {
     '<div class="sensor_value" data-value="0"></div>' +
     '</div>' +
     '</div>' +
-    '<div class="sensor_graph" data-info="hum">' +
-    '<div class="graph_unit">%</div>' +
-    '<canvas id="greenhouse' +
+    '<div class="sensor_graph" data-info="hum" id="sensor-graph-hum-' +
     id +
-    '_humGraph" width="150" height="70"></canvas>' +
+    '">' +
+    '<div class="graph_unit">%</div>' +
+    '<div id="greenhouse' +
+    id +
+    '_humGraph" class="graph_container"></div>' +
     '</div>' +
     '</div>' +
     '<div class="sensor_holder soil_holder">' +
@@ -472,41 +474,17 @@ function createFarm(id) {
     '<div class="sensor_value" data-value="0"></div>' +
     '</div>' +
     '</div>' +
-    '<div class="sensor_graph" data-info="soil">' +
-    '<div class="graph_unit">mm</div>' +
-    '<canvas id="greenhouse' +
+    '<div class="sensor_graph" data-info="soil" id="sensor-graph-soil-' +
     id +
-    '_soilGraph" width="150" height="70"></canvas>' +
+    '">' +
+    '<div class="graph_unit">mm</div>' +
+    '<div id="greenhouse' +
+    id +
+    '_soilGraph" class="graph_container"></div>' +
     '</div>' +
     '</div>' +
     '</div>' +
     '</div>';
-  //'<script>' +
-  //'$("#greenhouse' +
-  //id +
-  //' .sensor_graph").click(function () {' +
-  //'ctx = $(this).find("div");' +
-  //'if($(this).hasClass("fullScreenMode")) {' +
-  //'myChart["greenhouse' +
-  //id +
-  //'"][$(this).data("info")].options.scales.yAxes[0].ticks.userCallback = function(value, index, values) {if(index == 0 || index == values.length-1) return value;};' +
-  //'myChart["greenhouse' +
-  //id +
-  //'"][$(this).data("info")].options.scales.xAxes[0].time.displayFormats.hour = "H:mm";' +
-  //'} else {' +
-  //'myChart["greenhouse' +
-  //id +
-  //'"][$(this).data("info")].options.scales.yAxes[0].ticks.userCallback = null;' +
-  //'myChart["greenhouse' +
-  //id +
-  //'"][$(this).data("info")].options.scales.xAxes[0].time.displayFormats.hour = "MMMM D, H:mm";' +
-  //'}' +
-  //'myChart["greenhouse' +
-  //id +
-  //'"][$(this).data("info")].update();' +
-  //'$(this).toggleClass("fullScreenMode");' +
-  //'});' +
-  //'</script>';
   $('.farms_holder').append(newFarm);
   $('.page_content.nano').nanoScroller();
   $('#greenhouse' + id + ' .waterswitcher input').click(function(event) {
@@ -516,8 +494,25 @@ function createFarm(id) {
     sendLampAction(event, id);
   });
   myChart['greenhouse' + id] = [];
-  ctx = 'greenhouse' + id + '_tempGraph';
-  //myChart['greenhouse' + id]['temp'] =
+  var chart_click = function() {
+    let g_id = $(this).attr('greenhouse-id');
+    let ch_id = $(this).attr('data-info');
+    let c = myChart[g_id][ch_id];
+    if ($(this).hasClass('fullScreenMode')) {
+      c.options.scales.xAxes[0].time.displayFormats.hour = 'H:mm';
+      c.options.scales.xAxes[0].ticks.maxTicksLimit = 3;
+    } else {
+      c.options.scales.xAxes[0].time.displayFormats.hour = 'MMMM D, H:mm';
+      c.options.scales.xAxes[0].ticks.maxTicksLimit = 5;
+      c.options.scales.yAxes[0].ticks.userCallback = null;
+    }
+    $(this).toggleClass('fullScreenMode');
+    $(this)
+      .find('.graph_container')
+      .toggleClass('fullScreenMode');
+    c.update();
+  };
+  var ctx = 'greenhouse' + id + '_tempGraph';
   var cfg = {
     type: 'line',
     data: {
@@ -544,49 +539,10 @@ function createFarm(id) {
   );
   myChart['greenhouse' + id]['temp'].update();
   $('#sensor-graph-temp-' + id).attr('greenhouse-id', 'greenhouse' + id);
-  $('#sensor-graph-temp-' + id).on('click', function() {
-    let g_id = $(this).attr('greenhouse-id');
-    let ch_id = $(this).attr('data-info');
-    let c = myChart[g_id][ch_id];
-    if ($(this).hasClass('fullScreenMode')) {
-      c.options.scales.xAxes[0].time.displayFormats.hour = 'H:mm';
-      c.options.scales.xAxes[0].ticks.maxTicksLimit = 3;
-      c.options.scales.yAxes[0].ticks.userCallback = function(value, index, values) {
-        if(index == 0 || index == values.length-1) return value;
-      }
-    } else {
-      c.options.scales.xAxes[0].time.displayFormats.hour = 'MMMM D, H:mm';
-      c.options.scales.xAxes[0].ticks.maxTicksLimit = 10;
-      c.options.scales.yAxes[0].ticks.userCallback = null;
-    }
-    $(this).toggleClass('fullScreenMode');
-    $(this)
-      .find('.graph_container')
-      .toggleClass('fullScreenMode');
-    c.update();
-  });
-  return;
-  //cfg.options.tooltips.callbacks.label = function(tooltipItem) {
-  //return tooltipItem.yLabel + '°C';
-  //};
-  //myChart['greenhouse' + id]['temp'].update();
-  //myChart['greenhouse' + id]['tempInterval'] = setInterval(function() {
-  //if ($('#greenhouse' + id + '_tempGraph').is(':visible')) {
-  //clearInterval(myChart['greenhouse' + id]['tempInterval']);
-  //$eva.toolbox.chart(
-  //'greenhouse' + id + '_tempGraph',
-  //'temp',
-  //'sensor:greenhouse' + id + '/env/temp',
-  //{update: 30, fill: '10T:1'},
-  //myChart['greenhouse' + id]['temp']
-  //);
-  //}
-  //}, 100);
-  return;
-  ctx = document
-    .getElementById('greenhouse' + id + '_humGraph')
-    .getContext('2d');
-  myChart['greenhouse' + id]['hum'] = new Chart(ctx, {
+  $('#sensor-graph-temp-' + id).on('click', chart_click);
+
+  ctx = 'greenhouse' + id + '_humGraph';
+  var cfg = {
     type: 'line',
     data: {
       labels: [],
@@ -600,38 +556,28 @@ function createFarm(id) {
         }
       ]
     },
-    options: chartOptions
-  });
-  myChart['greenhouse' + id]['hum'].options.scales.yAxes[0].ticks.min = 0;
-  myChart['greenhouse' + id]['hum'].options.scales.yAxes[0].ticks.max = 100;
-  myChart['greenhouse' + id]['hum'].options.tooltips.callbacks.label = function(
-    tooltipItem
-  ) {
-    return tooltipItem.yLabel + '%';
+    options: get_chart_options()
   };
+  cfg.options.scales.yAxes[0].ticks.min = 0;
+  cfg.options.scales.yAxes[0].ticks.max = 100;
+  myChart['greenhouse' + id]['hum'] = $eva.toolbox.chart(
+    ctx,
+    cfg,
+    'sensor:greenhouse' + id + '/env/hum',
+    {update: 60, fill: '10T:1', u: '%'}
+  );
   myChart['greenhouse' + id]['hum'].update();
-  myChart['greenhouse' + id]['humInterval'] = setInterval(function() {
-    if ($('#greenhouse' + id + '_humGraph').is(':visible')) {
-      clearInterval(myChart['greenhouse' + id]['humInterval']);
-      $eva.toolbox.chart(
-        'greenhouse' + id + '_humGraph',
-        'hum',
-        'sensor:greenhouse' + id + '/env/hum',
-        {update: 30, fill: '10T:1'},
-        myChart['greenhouse' + id]['hum']
-      );
-    }
-  }, 100);
-  ctx = document
-    .getElementById('greenhouse' + id + '_soilGraph')
-    .getContext('2d');
-  myChart['greenhouse' + id]['soil'] = new Chart(ctx, {
+  $('#sensor-graph-hum-' + id).attr('greenhouse-id', 'greenhouse' + id);
+  $('#sensor-graph-hum-' + id).on('click', chart_click);
+
+  ctx = 'greenhouse' + id + '_soilGraph';
+  var cfg = {
     type: 'line',
     data: {
       labels: [],
       datasets: [
         {
-          label: 'Soil',
+          label: 'Soil m.',
           data: [],
           fill: 'start',
           pointRadius: 0,
@@ -639,26 +585,17 @@ function createFarm(id) {
         }
       ]
     },
-    options: chartOptions
-  });
-  myChart['greenhouse' + id]['soil'].options.scales.yAxes[0].ticks.min = 65;
-  myChart['greenhouse' + id]['soil'].options.scales.yAxes[0].ticks.max = 125;
-  myChart['greenhouse' + id][
-    'soil'
-  ].options.tooltips.callbacks.label = function(tooltipItem) {
-    return tooltipItem.yLabel + 'mm';
+    options: get_chart_options()
   };
+  cfg.options.scales.yAxes[0].ticks.min = 60;
+  cfg.options.scales.yAxes[0].ticks.max = 130;
+  myChart['greenhouse' + id]['soil'] = $eva.toolbox.chart(
+    ctx,
+    cfg,
+    'sensor:greenhouse' + id + '/env/soilm',
+    {update: 60, fill: '10T:1', u: ' mm'}
+  );
   myChart['greenhouse' + id]['soil'].update();
-  myChart['greenhouse' + id]['soilInterval'] = setInterval(function() {
-    if ($('#greenhouse' + id + '_soilGraph').is(':visible')) {
-      clearInterval(myChart['greenhouse' + id]['soilInterval']);
-      $eva.toolbox.chart(
-        'greenhouse' + id + '_soilGraph',
-        null,
-        'sensor:greenhouse' + id + '/env/soilm',
-        {update: 30, fill: '10T:1'},
-        myChart['greenhouse' + id]['soil']
-      );
-    }
-  }, 100);
+  $('#sensor-graph-soil-' + id).attr('greenhouse-id', 'greenhouse' + id);
+  $('#sensor-graph-soil-' + id).on('click', chart_click);
 }
