@@ -1,3 +1,8 @@
+function chart_animation(ctx) {
+  var el = typeof ctx === 'object' ? ctx : document.getElementById(ctx);
+  el.innerHTML = '<div class="lds-container"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>';
+}
+
 function show_login_form() {
   $('.dialog_window_holder.login_window').show();
   $('.login_window #password').focus();
@@ -535,7 +540,7 @@ function createFarm(id) {
     ctx,
     cfg,
     'sensor:greenhouse' + id + '/env/temp',
-    {update: 60, fill: '10T:1', units: '°C'}
+    {update: 60, fill: '10T:1', units: '°C', animate: chart_animation }
   );
   myChart['greenhouse' + id]['temp'].update();
   $('#sensor-graph-temp-' + id).attr('greenhouse-id', 'greenhouse' + id);
@@ -564,7 +569,7 @@ function createFarm(id) {
     ctx,
     cfg,
     'sensor:greenhouse' + id + '/env/hum',
-    {update: 60, fill: '10T:1', units: '%'}
+    {update: 60, fill: '10T:1', units: '%', animate: chart_animation }
   );
   myChart['greenhouse' + id]['hum'].update();
   $('#sensor-graph-hum-' + id).attr('greenhouse-id', 'greenhouse' + id);
@@ -593,7 +598,7 @@ function createFarm(id) {
     ctx,
     cfg,
     'sensor:greenhouse' + id + '/env/soilm',
-    {update: 60, fill: '10T:1', units: ' mm'}
+    {update: 60, fill: '10T:1', units: ' mm', animate: chart_animation }
   );
   myChart['greenhouse' + id]['soil'].update();
   $('#sensor-graph-soil-' + id).attr('greenhouse-id', 'greenhouse' + id);
