@@ -60,7 +60,10 @@ Network and containers
 ======================
 
 * Both UCs are set up on dedicated nodes and dynamically discovered by LM/SFA
+  and exchange data via MQTT server
+
 * SFA and LM PLC are set up on the same node and statically connected via HTTP
+  and exchange data via P2P connection
 
 * **eva_farm_mqtt** local MQTT server (mosquitto), *10.27.12.200*
 * **eva_farm_uc1** UC in greenhouse 1, *10.27.12.101*

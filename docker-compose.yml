@@ -19,6 +19,7 @@ services:
       - MASTERKEY=demo123
       - DEFAULTKEY=demo-default
       - OPKEY=
+      - OPPASSWD=
       - cloud_manager=
       - deploy=
       - download=
@@ -40,6 +41,7 @@ services:
       - MASTERKEY=demo123
       - DEFAULTKEY=demo-default
       - OPKEY=
+      - OPPASSWD=
       - cloud_manager=
       - deploy=
       - download=
@@ -63,6 +65,7 @@ services:
       - MASTERKEY=demo123
       - DEFAULTKEY=demo-default
       - OPKEY=
+      - OPPASSWD=123
       - cloud_manager=1
       - deploy=
       - download=

@@ -1,8 +1,5 @@
 #!/bin/sh
 
-USER=operator
-PASSWORD=123
-
 MA_SETUP="uc/farm-uc1 uc/farm-uc2"
 
 if [ "x$1" = "x" ]; then
@@ -45,14 +42,6 @@ for c in $MA_SETUP; do
     exit 3
   fi
 done
-echo -n "Creating user '${USER}' with password '${PASSWORD}': "
-docker exec eva_farm_scada eva sfa user create ${USER} ${PASSWORD} operator |grep 'key : operator' > /dev/null
-if [ $? -ne 0 ]; then
-  echo "FAILED"
-  exit 3
-else
-  echo "OK"
-fi
 echo "Setup completed, starting configuration deployment"
 docker exec -t eva_farm_scada bash -c 'cd /deploy-cfg && eva sfa cloud deploy -y farm-demo.yml'
 exit 0
