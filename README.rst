@@ -117,7 +117,7 @@ CLI management:
     
     *docker exec -it <container_name> eva-shell*
 
-e.g. enter **eva_sfa_scada** node shell:
+e.g. enter **eva_farm_scada** node shell:
 
     *docker exec -it eva_farm_scada eva-shell*
 
