@@ -93,7 +93,7 @@ def main():
             s=1)
         for k, v in data.items():
             result = rpc(i='sensor:greenhouse{}/env/{}'.format(gh, k), v=v)
-            if not result.data.result.get('ok'):
+            if not result.get('ok'):
                 raise Exception('Update failed')
 
 
