@@ -1,6 +1,27 @@
 #!/usr/bin/env python3
 
 
+def jrpc(url, method, **kwargs):
+    import requests
+    import uuid
+    payload = {
+        'jsonrpc': '2.0',
+        'id': str(uuid.uuid4()),
+        'method': method,
+        'params': kwargs
+    }
+    result = requests.post(url, json=payload, timeout=1)
+    if not result.ok:
+        raise Exception('HTTP ERROR {}'.format(result.status_code))
+    data = result.json()
+    if 'error' in data:
+        raise Exception('API error {}: {}'.format(data['error']['code'],
+                                                  data['error']['message']))
+    if 'result' not in data:
+        raise Exception('Invalid data received')
+    return data['result']
+
+
 def simulate_data(stp):
     _stp = stp
 
@@ -61,7 +82,6 @@ def main():
 
     api_key = args.api_key if args.api_key is not None else 'demo123'
 
-    from jsonrpcclient import request as jrpc
     from functools import partial
 
     for gh in range(1, greenhouses + 1):
