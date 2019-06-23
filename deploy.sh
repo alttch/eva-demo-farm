@@ -25,7 +25,7 @@ while [ 1 ]; do
   fi
 done
 sleep 3
-echo "Cluster is up. Waiting 30 seconds to let nodes discover each other..."
+echo "Cluster is up. Waiting 30 seconds to let controllers discover each other..."
 sleep 30
 echo "Setting up SFA management API"
 for c in $MA_SETUP; do
