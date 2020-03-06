@@ -19,7 +19,8 @@ time_ds = time.time() - stp
 
 s = stp - 86400
 
-db = sqlalchemy.create_engine('sqlite:///data/sfa_history.db').connect()
+db = sqlalchemy.create_engine(
+    'sqlite:////opt/eva/runtime/db/sfa_history.db').connect()
 
 db.execute(sql('delete from state_history'))
 
@@ -33,14 +34,14 @@ while s <= stp:
     for i in range(1, 3):
         for k, v in data.items():
             oid = 'sensor:greenhouse{}/env/{}'.format(i, k)
-            db.execute(
-                sql('insert into state_history (space, t, oid, status, value) '
-                    + 'values (:space, :t, :oid, :status, :value)'),
-                space='',
-                t=time_ds + s,
-                oid=oid,
-                status=1,
-                value=v)
+            db.execute(sql(
+                'insert into state_history (space, t, oid, status, value) ' +
+                'values (:space, :t, :oid, :status, :value)'),
+                       space='',
+                       t=time_ds + s,
+                       oid=oid,
+                       status=1,
+                       value=v)
     s += 60
 
 dbt.commit()

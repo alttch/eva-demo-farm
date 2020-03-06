@@ -1,0 +1,35 @@
+version: '3'
+services:
+  eva-farm-server:
+    container_name: eva_farm_server
+    image: test
+    hostname: farmsrv
+    ports:
+      - "8828:8828"
+    environment:
+      - auto_install=1
+      - link=1
+      - product=all
+      - layout=enterprise
+      - MASTERKEY=demo123
+      - DEFAULTKEY=demo-default
+      - OPPASSWD=123
+      - cloud_manager=1
+      - after_install=/deploy/deploy.sh
+      - single_machine=1
+      - generate_stats=1
+    networks:
+      eva_farm_ic:
+        ipv4_address: 10.27.12.199
+
+networks:
+  eva_farm_ic:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.27.12.0/24
+
+volumes:
+  ui:
+  cfg:

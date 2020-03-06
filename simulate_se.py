@@ -51,16 +51,23 @@ def main():
     import argparse
 
     ap = argparse.ArgumentParser(description='Simulate sensor events')
-    ap.add_argument(
-        '-t',
-        '--time',
-        metavar='SEC',
-        help='Seconds since day start (0..86400)',
-        type=int)
-    ap.add_argument(
-        '-J', '--json', action='store_true', help='print JSON and exit')
-    ap.add_argument(
-        '-K', '--api-key', metavar='KEY', help='API key (default: demo123)')
+    ap.add_argument('-t',
+                    '--time',
+                    metavar='SEC',
+                    help='Seconds since day start (0..86400)',
+                    type=int)
+    ap.add_argument('-J',
+                    '--json',
+                    action='store_true',
+                    help='print JSON and exit')
+    ap.add_argument('-K',
+                    '--api-key',
+                    metavar='KEY',
+                    default='demo123',
+                    help='API key (default: demo123)')
+    ap.add_argument('--local',
+                    help='Used for single machine install demo',
+                    action='store_true')
     args = ap.parse_args()
 
     greenhouses = 2
@@ -80,17 +87,13 @@ def main():
         print(json.dumps(data, indent=4, sort_keys=True))
         exit()
 
-    api_key = args.api_key if args.api_key is not None else 'demo123'
-
     from functools import partial
 
     for gh in range(1, greenhouses + 1):
-        rpc = partial(
-            jrpc,
-            'http://10.27.12.10{}:8812/jrpc'.format(gh),
-            'update',
-            k=api_key,
-            s=1)
+        api_url = 'http://localhost:8812/jrpc' if args.local \
+                else 'http://10.27.12.10{}:8812/jrpc'.format(gh)
+
+        rpc = partial(jrpc, api_url, 'update', k=args.api_key, s=1)
         for k, v in data.items():
             result = rpc(i='sensor:greenhouse{}/env/{}'.format(gh, k), v=v)
             if not result.get('ok'):

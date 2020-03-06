@@ -78,7 +78,7 @@ Deployment
 Requirements: `Docker <https://www.docker.com/>`_, `docker-compose
 <https://docs.docker.com/compose/>`_.
 
-* Execute *./deploy.sh* to deploy containers and demo configuration
+* Execute *docker-compose up* to deploy containers and demo configuration
 
 If setup has been failed, try starting *./deploy.sh* again.
 
