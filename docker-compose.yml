@@ -9,7 +9,7 @@ services:
 
   eva-uc1:
     container_name: eva_farm_uc1
-    image: altertech/eva-ics:3.3.0-2020060201-12
+    image: altertech/eva-ics:3.3.0-2020071003-14
     hostname: farm-uc1
     environment:
       - auto_install=1
