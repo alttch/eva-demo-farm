@@ -4,5 +4,5 @@ submodules:
 
 update-image-version:
 	./update-image-version.sh
-	git commit -a -m "${IMAGE}:${TAG}"
+	git commit -a -m "$(shell awk '/^from/ { print $$2 }' Dockerfile)"
 	git push
