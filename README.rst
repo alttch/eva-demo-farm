@@ -80,8 +80,6 @@ Requirements: `Docker <https://www.docker.com/>`_, `docker-compose
 
 * Execute *docker-compose up* to deploy containers and demo configuration
 
-If setup has been failed, try starting *./deploy.sh* again.
-
 Management
 ==========
 
