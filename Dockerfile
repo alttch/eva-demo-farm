@@ -1,6 +1,5 @@
-from altertech/eva-ics:3.3.1-2020082501-19
+from altertech/eva-ics:3.3.2-2021012803
 ADD deploy /deploy
-ADD ui /ui
 RUN mkdir /opt/sse
 COPY .online/crond-supervisor.conf /etc/supervisor/conf.d/crond.conf
 COPY .online/_sse.sh /opt/sse/

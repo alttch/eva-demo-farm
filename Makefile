@@ -10,3 +10,6 @@ do-update-image-version:
 commit-ver:
 	git commit -a -m "$(shell awk '/^from/ { print $$2 }' Dockerfile)"
 	git push
+
+pkg:
+	tar czf ./deploy/farm-demo-ui.evapkg setup.py ui

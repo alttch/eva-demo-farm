@@ -75,6 +75,17 @@ Network and containers
 Deployment
 ==========
 
+Local
+-----
+
+.. code:: bash
+
+    eva sfa cloud deploy -ys -c srv=$(hostname) \
+        https://raw.githubusercontent.com/alttch/eva-demo-farm/master/deploy/farm-demo-single.yml
+
+Docker
+------
+
 Requirements: `Docker <https://www.docker.com/>`_, `docker-compose
 <https://docs.docker.com/compose/>`_.
 
