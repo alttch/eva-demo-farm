@@ -27,5 +27,4 @@ if [ -z $single_machine ]; then
 else
   eva sfa cloud deploy -ys farm-demo-single.yml -c srv="$(hostname)"
 fi
-[ "$generate_stats" ] && ./generate.sh
 exit 0
