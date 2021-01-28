@@ -3,6 +3,7 @@ controller:
     key:
       operator:
         groups: "#"
+        sysfunc: true
     user:
       operator:
         password: "123"
