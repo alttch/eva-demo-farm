@@ -23,9 +23,9 @@ if [ -z $single_machine ]; then
     fi
   done
   echo "Setup completed, starting configuration deployment"
-  eva sfa cloud deploy -y farm-demo.yml
+  eva sfa cloud deploy -ys farm-demo.yml
 else
-  eva sfa cloud deploy -y farm-demo-single.yml -c srv="$(hostname)"
+  eva sfa cloud deploy -ys farm-demo-single.yml -c srv="$(hostname)"
 fi
 [ "$generate_stats" ] && ./generate.sh
 exit 0
