@@ -4,7 +4,7 @@ EVA ICS demo: Farm management
 Live demo
 =========
 
-@ https://farm.demo.eva-ics.com/
+@ https://demo-farm.eva-ics.com/
 
 Layout
 ======
