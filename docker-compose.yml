@@ -9,7 +9,7 @@ services:
 
   eva-uc1:
     container_name: eva_farm_uc1
-    image: altertech/eva-ics:3.3.2-2021040204-23
+    image: altertech/eva-ics:3.3.2-2021040205-24
     hostname: farm-uc1
     environment:
       - auto_install=1
@@ -24,7 +24,7 @@ services:
 
   eva-uc2:
     container_name: eva_farm_uc2
-    image: altertech/eva-ics:3.3.2-2021040204-23
+    image: altertech/eva-ics:3.3.2-2021040205-24
     hostname: farm-uc2
     environment:
       - auto_install=1
@@ -39,7 +39,7 @@ services:
 
   eva-scada:
     container_name: eva_farm_scada
-    image: altertech/eva-ics:3.3.2-2021040204-23
+    image: altertech/eva-ics:3.3.2-2021040205-24
     hostname: farm-scada
     ports:
       - "8828:8828"
