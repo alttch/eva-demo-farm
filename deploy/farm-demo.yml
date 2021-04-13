@@ -1,7 +1,7 @@
 controller:
   local:
     after-deploy:
-      - install-pkg: https://github.com/alttch/eva-js-framework/releases/download/v0.3.20/eva-js-framework-0.3.20.evapkg
+      - install-pkg: https://github.com/alttch/eva-js-framework/releases/download/v0.3.22/eva-js-framework-0.3.22.evapkg
       - install-pkg: farm-demo-ui.evapkg
   uc/farm-uc1:
     phi:
