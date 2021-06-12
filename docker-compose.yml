@@ -2,7 +2,7 @@ version: '3'
 services:
   mqtt:
     container_name: eva_farm_mqtt
-    image: eclipse-mosquitto
+    image: eclipse-mosquitto:1.6.15
     networks:
       eva_farm_ic:
         ipv4_address: 10.27.12.200
