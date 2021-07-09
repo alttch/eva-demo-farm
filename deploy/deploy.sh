@@ -4,20 +4,18 @@ cd /deploy
 
 MA_SETUP="uc/farm-uc1 uc/farm-uc2"
 
-if [ -z $single_machine ]; then
+if [ -z "$SINGLE_MACHINE" ]; then
   echo "Cluster is up. Waiting 30 seconds to let controllers discover each other..."
   sleep 30
   echo "Setting up SFA management API"
   for c in $MA_SETUP; do
     echo -n "eva sfa controller set $c masterkey \$masterkey -> "
-    eva sfa controller set $c masterkey \$masterkey -y |grep OK
-    if [ $? -ne 0 ]; then
+    if ! eva sfa controller set "$c" masterkey \$masterkey -y |grep OK; then
       echo "FAILED"
       exit 3
     fi
     echo -n "eva sfa controller ma-test $c -> "
-    eva sfa controller ma-test $c|grep OK
-    if [ $? -ne 0 ]; then
+    if ! eva sfa controller ma-test "$c"|grep OK; then
       echo "FAILED"
       exit 3
     fi

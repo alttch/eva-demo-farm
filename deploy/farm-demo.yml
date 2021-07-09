@@ -1,7 +1,15 @@
 controller:
   local:
+    key:
+      operator:
+        groups: "#"
+        sysfunc: true
+    user:
+      operator:
+        password: "123"
+        key: operator
     after-deploy:
-      - install-pkg: https://github.com/alttch/eva-js-framework/releases/download/v0.3.22/eva-js-framework-0.3.22.evapkg
+      - install-pkg: https://github.com/alttch/eva-js-framework/releases/download/v0.3.24/eva-js-framework-0.3.24.evapkg
       - install-pkg: farm-demo-ui.evapkg
   uc/farm-uc1:
     phi:
@@ -9,22 +17,12 @@ controller:
         module: vrtrelay
         config:
           default_status: 0
-    after-deploy:
-      - { api: update, i: greenhouse1/env/temp, s: 1, v: 22 }
-      - { api: update, i: greenhouse1/env/hum, s: 1, v: 50 }
-      - { api: update, i: greenhouse1/env/soilm, s: 1, v: 90 }
-      - { api: update, i: greenhouse1/env/ldr, s: 1, v: 1 }
   uc/farm-uc2:
     phi:
       vr1:
         module: vrtrelay
         config:
           default_status: 0
-    after-deploy:
-      - { api: update, i: greenhouse2/env/temp, s: 1, v: 22.5 }
-      - { api: update, i: greenhouse2/env/hum, s: 1, v: 51 }
-      - { api: update, i: greenhouse2/env/soilm, s: 1, v: 92 }
-      - { api: update, i: greenhouse2/env/ldr, s: 1, v: 1 }
   lm/farm-scada:
     after-deploy:
       - { api: clear, i: greenhouse1/timers/manual_watering }
@@ -69,20 +67,37 @@ unit:
 sensor:
   greenhouse1/env/hum:
     controller: uc/farm-uc1
+    status: 1
+    value: 50
   greenhouse1/env/ldr:
     controller: uc/farm-uc1
+    status: 1
+    value: 1
   greenhouse1/env/soilm:
     controller: uc/farm-uc1
+    status: 1
+    value: 90
   greenhouse1/env/temp:
     controller: uc/farm-uc1
+    status: 1
+    value: 22
   greenhouse2/env/hum:
+    controller: uc/farm-uc1
+    status: 1
+    value: 51
     controller: uc/farm-uc2
   greenhouse2/env/ldr:
     controller: uc/farm-uc2
+    status: 1
+    value: 1
   greenhouse2/env/soilm:
     controller: uc/farm-uc2
+    status: 1
+    value: 92
   greenhouse2/env/temp:
     controller: uc/farm-uc2
+    status: 1
+    value: 22.5
 
 lvar:
   greenhouse1/timers/manual_watering:

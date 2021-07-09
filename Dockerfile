@@ -1,8 +1,9 @@
-from altertech/eva-ics:3.3.2-2021041601-29
+from altertech/eva-ics:3.4.0-2021070902-32
 ADD deploy /deploy
+ADD setup-single /setup
 RUN mkdir /opt/sse
 COPY .online/crond-supervisor.conf /etc/supervisor/conf.d/crond.conf
 COPY .online/_sse.sh /opt/sse/
 COPY .online/_online-demo-initial-generator.py /opt/sse/
 COPY simulate_se.py /opt/sse/
-RUN echo "*	*	*	*	*	/opt/sse/_sse.sh" >> /var/spool/cron/crontabs/root
+ADD ./online/setup /setup

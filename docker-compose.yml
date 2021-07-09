@@ -9,54 +9,47 @@ services:
 
   eva-uc1:
     container_name: eva_farm_uc1
-    image: altertech/eva-ics:3.3.2-2021041601-29
+    image: altertech/eva-ics:3.4.0-2021070902-32
     hostname: farm-uc1
     environment:
-      - auto_install=1
-      - mqtt=10.27.12.200
-      - product=uc
-      - layout=enterprise
       - MASTERKEY=demo123
       - DEFAULTKEY=demo-default
     networks:
       eva_farm_ic:
         ipv4_address: 10.27.12.101
+    volumes:
+      - ./setup/prepare-uc-node.sh:/setup/prepare.sh
+      - ./setup/setup-cloud.sh:/setup/setup.sh
 
   eva-uc2:
     container_name: eva_farm_uc2
-    image: altertech/eva-ics:3.3.2-2021041601-29
+    image: altertech/eva-ics:3.4.0-2021070902-32
     hostname: farm-uc2
     environment:
-      - auto_install=1
-      - mqtt=10.27.12.200
-      - product=uc
-      - layout=enterprise
       - MASTERKEY=demo123
       - DEFAULTKEY=demo-default
     networks:
       eva_farm_ic:
         ipv4_address: 10.27.12.102
+    volumes:
+      - ./setup/prepare-uc-node.sh:/setup/prepare.sh
+      - ./setup/setup-cloud.sh:/setup/setup.sh
 
   eva-scada:
     container_name: eva_farm_scada
-    image: altertech/eva-ics:3.3.2-2021041601-29
+    image: altertech/eva-ics:3.4.0-2021070902-32
     hostname: farm-scada
     ports:
       - "8828:8828"
     environment:
-      - auto_install=1
-      - mqtt=10.27.12.200
-      - link=1
-      - product="lm sfa"
-      - layout=enterprise
       - MASTERKEY=demo123
       - DEFAULTKEY=demo-default
-      - OPPASSWD=123
-      - cloud_manager=1
       - after_install=/deploy/deploy.sh
     volumes:
         - ./ui:/ui
         - ./deploy:/deploy
+        - ./setup/prepare-scada-node.sh:/setup/prepare.sh
+        - ./setup/setup-scada-node.sh:/setup/setup.sh
     networks:
       eva_farm_ic:
         ipv4_address: 10.27.12.199
