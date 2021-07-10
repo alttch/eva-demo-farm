@@ -1,4 +1,4 @@
-from altertech/eva-ics:3.4.0-2021070902-32
+from altertech/eva-ics:3.4.0-2021070902-34
 ADD deploy /deploy
 RUN mkdir /opt/sse
 COPY .online/_sse.sh /opt/sse/
