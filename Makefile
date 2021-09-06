@@ -12,7 +12,8 @@ commit-ver:
 	git push
 
 pkg:
-	tar --exclude=eva*.js --exclude=apps czf ./deploy/farm-demo-ui.evapkg setup.py ui
+	rm -f ./deploy/farm-demo-ui.evapkg
+	tar --exclude=eva*.js --exclude=apps -czvf ./deploy/farm-demo-ui.evapkg setup.py ui
 
 docker-image:
 	jks build eva-demo-farm
