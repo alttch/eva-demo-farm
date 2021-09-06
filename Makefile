@@ -2,7 +2,7 @@ submodules:
 	git submodule init
 	git submodule update --recursive --remote
 
-update-image-version: do-update-image-version commit-ver docker-image
+update-version: do-update-image-version commit-ver docker-image
 
 do-update-image-version:
 	./update-image-version.sh
@@ -12,7 +12,7 @@ commit-ver:
 	git push
 
 pkg:
-	tar czf ./deploy/farm-demo-ui.evapkg setup.py ui
+	tar --exclude=eva*.js --exclude=apps czf ./deploy/farm-demo-ui.evapkg setup.py ui
 
 docker-image:
 	jks build eva-demo-farm
