@@ -1,3 +1,3 @@
 #!/bin/sh
 
-python3 ./simulate_se.py -t 43200
+python3 ./simulate_se.py -t 43200 $*
